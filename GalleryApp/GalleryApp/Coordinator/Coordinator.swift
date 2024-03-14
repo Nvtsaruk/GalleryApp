@@ -3,9 +3,9 @@ protocol CoordinatorProtocol {
     func start()
 }
 final class Coordinator: CoordinatorProtocol {
-    
+
     let navigationController = UINavigationController()
-    
+
     func start() {
         let vc = ImageGalleryScreenView()
         let viewModel = ImageGalleryScreenViewModel()

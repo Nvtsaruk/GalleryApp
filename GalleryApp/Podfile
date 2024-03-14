@@ -7,4 +7,5 @@ target 'GalleryApp' do
 
   # Pods for GalleryApp
   pod 'SwiftLint'
+  pod 'SnapKit', '~> 5.7.0'
 end

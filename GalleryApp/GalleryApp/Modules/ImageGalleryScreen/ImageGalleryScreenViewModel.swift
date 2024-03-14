@@ -1,7 +1,7 @@
 import Foundation
 
 protocol ImageGalleryScreenViewModelProtocol {
-    
+
 }
 
 final class ImageGalleryScreenViewModel: ImageGalleryScreenViewModelProtocol {
