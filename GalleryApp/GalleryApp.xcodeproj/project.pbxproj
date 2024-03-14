@@ -13,6 +13,11 @@
 		CC4AACA32BA1D67B004746CC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4AACA22BA1D67B004746CC /* ViewController.swift */; };
 		CC4AACA82BA1D67C004746CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC4AACA72BA1D67C004746CC /* Assets.xcassets */; };
 		CC4AACAB2BA1D67C004746CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC4AACA92BA1D67C004746CC /* LaunchScreen.storyboard */; };
+		CC9C67892BA30C8C002B6EE0 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C67882BA30C8C002B6EE0 /* Coordinator.swift */; };
+		CC9C678B2BA31208002B6EE0 /* ImageGalleryScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C678A2BA31208002B6EE0 /* ImageGalleryScreenView.swift */; };
+		CC9C678D2BA32107002B6EE0 /* ImageDetailScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C678C2BA32107002B6EE0 /* ImageDetailScreenView.swift */; };
+		CC9C678F2BA3240F002B6EE0 /* ImageGalleryScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C678E2BA3240F002B6EE0 /* ImageGalleryScreenViewModel.swift */; };
+		CC9C67912BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C67902BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +31,11 @@
 		CC4AACA72BA1D67C004746CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC4AACAA2BA1D67C004746CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CC4AACAC2BA1D67C004746CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CC9C67882BA30C8C002B6EE0 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		CC9C678A2BA31208002B6EE0 /* ImageGalleryScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGalleryScreenView.swift; sourceTree = "<group>"; };
+		CC9C678C2BA32107002B6EE0 /* ImageDetailScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailScreenView.swift; sourceTree = "<group>"; };
+		CC9C678E2BA3240F002B6EE0 /* ImageGalleryScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGalleryScreenViewModel.swift; sourceTree = "<group>"; };
+		CC9C67902BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailsScreenViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,8 +100,8 @@
 		CC9C67822BA2F3EC002B6EE0 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				CC9C67852BA2F433002B6EE0 /* ImageDetailScreen */,
 				CC9C67832BA2F412002B6EE0 /* ImageGalleryScreen */,
+				CC9C67852BA2F433002B6EE0 /* ImageDetailScreen */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -99,6 +109,8 @@
 		CC9C67832BA2F412002B6EE0 /* ImageGalleryScreen */ = {
 			isa = PBXGroup;
 			children = (
+				CC9C678A2BA31208002B6EE0 /* ImageGalleryScreenView.swift */,
+				CC9C678E2BA3240F002B6EE0 /* ImageGalleryScreenViewModel.swift */,
 			);
 			path = ImageGalleryScreen;
 			sourceTree = "<group>";
@@ -113,6 +125,8 @@
 		CC9C67852BA2F433002B6EE0 /* ImageDetailScreen */ = {
 			isa = PBXGroup;
 			children = (
+				CC9C678C2BA32107002B6EE0 /* ImageDetailScreenView.swift */,
+				CC9C67902BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift */,
 			);
 			path = ImageDetailScreen;
 			sourceTree = "<group>";
@@ -120,6 +134,7 @@
 		CC9C67862BA2F445002B6EE0 /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
+				CC9C67882BA30C8C002B6EE0 /* Coordinator.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -250,7 +265,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC9C678F2BA3240F002B6EE0 /* ImageGalleryScreenViewModel.swift in Sources */,
+				CC9C67892BA30C8C002B6EE0 /* Coordinator.swift in Sources */,
+				CC9C678B2BA31208002B6EE0 /* ImageGalleryScreenView.swift in Sources */,
+				CC9C67912BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift in Sources */,
 				CC4AACA32BA1D67B004746CC /* ViewController.swift in Sources */,
+				CC9C678D2BA32107002B6EE0 /* ImageDetailScreenView.swift in Sources */,
 				CC4AAC9F2BA1D67B004746CC /* AppDelegate.swift in Sources */,
 				CC4AACA12BA1D67B004746CC /* SceneDelegate.swift in Sources */,
 			);
