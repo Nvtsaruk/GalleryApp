@@ -10,14 +10,14 @@ class ImageGalleryScreenView: UIViewController {
 //    var collectionView = UICollectionView()
     private lazy var photoView: UICollectionView = {
             let layout = UICollectionViewFlowLayout()
-        layout.estimatedItemSize = CGSize(width: view.frame.width/3, height: view.frame.width/3)
-            layout.itemSize = CGSize(width: 64, height: 24)
+//        layout.estimatedItemSize = CGSize(width: view.frame.width/3, height: view.frame.width/3)
+            layout.itemSize = CGSize(width: view.frame.width/3, height: view.frame.width/3)
             layout.scrollDirection = .vertical
             layout.minimumInteritemSpacing = 0
             let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
             collectionView.delegate = self
             collectionView.dataSource = self
-            collectionView.backgroundColor = .white
+            collectionView.backgroundColor = .lightGray
             collectionView.showsHorizontalScrollIndicator = false
             collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             return collectionView
