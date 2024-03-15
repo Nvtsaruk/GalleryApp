@@ -3,7 +3,7 @@ import Combine
 
 enum NetworkConstants {
     case token
-    var value : String {
+    var value: String {
         switch self {
             case .token:
                 return "B_8irYfHoAoq6EvqrmbQdXo3U1tYXFcaQmMGkyqpJkI"
@@ -13,7 +13,7 @@ enum NetworkConstants {
 
 final class ApiService {
     func getPhotos(page: Int) -> AnyPublisher<[PhotoList], Error> {
-        let url = URL(string: "https://api.unsplash.com/photos?page=\(page)")!
+        let url = URL(string: "https://api.unsplash.com/photos?page=1&per_page=30")!
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
             request.setValue("Client-ID \(NetworkConstants.token.value)", forHTTPHeaderField: "Authorization")
