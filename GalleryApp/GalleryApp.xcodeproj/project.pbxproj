@@ -18,6 +18,8 @@
 		CC9C678D2BA32107002B6EE0 /* ImageDetailScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C678C2BA32107002B6EE0 /* ImageDetailScreenView.swift */; };
 		CC9C678F2BA3240F002B6EE0 /* ImageGalleryScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C678E2BA3240F002B6EE0 /* ImageGalleryScreenViewModel.swift */; };
 		CC9C67912BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C67902BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift */; };
+		CC9C67932BA33620002B6EE0 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C67922BA33620002B6EE0 /* APIService.swift */; };
+		CC9C67962BA3363B002B6EE0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C67952BA3363B002B6EE0 /* Model.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		CC9C678C2BA32107002B6EE0 /* ImageDetailScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailScreenView.swift; sourceTree = "<group>"; };
 		CC9C678E2BA3240F002B6EE0 /* ImageGalleryScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGalleryScreenViewModel.swift; sourceTree = "<group>"; };
 		CC9C67902BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailsScreenViewModel.swift; sourceTree = "<group>"; };
+		CC9C67922BA33620002B6EE0 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		CC9C67952BA3363B002B6EE0 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +122,8 @@
 		CC9C67842BA2F42D002B6EE0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				CC9C67922BA33620002B6EE0 /* APIService.swift */,
+				CC9C67952BA3363B002B6EE0 /* Model.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -288,8 +294,10 @@
 				CC9C678B2BA31208002B6EE0 /* ImageGalleryScreenView.swift in Sources */,
 				CC9C67912BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift in Sources */,
 				CC4AACA32BA1D67B004746CC /* ViewController.swift in Sources */,
+				CC9C67962BA3363B002B6EE0 /* Model.swift in Sources */,
 				CC9C678D2BA32107002B6EE0 /* ImageDetailScreenView.swift in Sources */,
 				CC4AAC9F2BA1D67B004746CC /* AppDelegate.swift in Sources */,
+				CC9C67932BA33620002B6EE0 /* APIService.swift in Sources */,
 				CC4AACA12BA1D67B004746CC /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

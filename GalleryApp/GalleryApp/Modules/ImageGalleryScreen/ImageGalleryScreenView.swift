@@ -1,10 +1,3 @@
-//
-//  ImageGalleryScreenView.swift
-//  GalleryApp
-//
-//  Created by Tsaruk Nick on 14.03.24.
-//
-
 import UIKit
 import SnapKit
 
@@ -12,11 +5,11 @@ class ImageGalleryScreenView: UIViewController {
 
     var viewModel: ImageGalleryScreenViewModelProtocol?
     
-    var collectionView = UICollectionView()
+//    var collectionView = UICollectionView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        viewModel?.getData()
     }
     
     private func configUI() {
