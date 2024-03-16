@@ -14,7 +14,7 @@ final class Coordinator: CoordinatorProtocol {
         imageGalleryViewController.viewModel = viewModel
         navigationController.pushViewController(imageGalleryViewController, animated: true)
     }
-    
+
     func pushDetailsView(id: Int, photos: [PhotoList]) {
         let detailsViewController = ImageDetailScreenView()
         let viewModel = ImageDetailsScreenViewModel()

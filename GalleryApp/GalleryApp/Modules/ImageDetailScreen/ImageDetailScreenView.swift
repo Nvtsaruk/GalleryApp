@@ -12,7 +12,7 @@ class ImageDetailScreenView: UIViewController {
         super.viewDidLoad()
         setupUI()
     }
-    
+
     private func setupUI() {
         view.backgroundColor = .white
         view.addSubview(photoImageView)

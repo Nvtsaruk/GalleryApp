@@ -9,7 +9,7 @@ final class ImageGalleryScreenViewModel: ImageGalleryScreenViewModelProtocol {
     var coordinator: CoordinatorProtocol?
     let apiService = ApiService()
     private var cancellable: Set<AnyCancellable> = []
-    @Published var photos: [PhotoList] = [] 
+    @Published var photos: [PhotoList] = []
     var photosPublisher: Published<[PhotoList]>.Publisher { $photos }
     func getData() {
         apiService.getPhotos(page: 1)

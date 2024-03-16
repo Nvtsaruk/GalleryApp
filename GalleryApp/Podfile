@@ -9,4 +9,5 @@ target 'GalleryApp' do
   pod 'SwiftLint'
   pod 'SnapKit', '~> 5.7.0'
   pod 'SDWebImage', '~> 5.0'
+  pod 'Hero'	
 end

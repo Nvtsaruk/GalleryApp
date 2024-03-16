@@ -29,13 +29,13 @@ class ImageGalleryScreenView: UIViewController {
         configUI()
         setupBind()
     }
-    
+
     private func setupBind() {
         viewModel?.$photos
             .receive(on: DispatchQueue.main)
             .sink { error in
             print(error)
-        } receiveValue: { photos in
+        } receiveValue: { _ in
             self.photoView.reloadData()
         }.store(in: &cancellable)
 
@@ -65,7 +65,7 @@ final class PhotoCell: UICollectionViewCell {
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
         photoImageView.layer.cornerRadius = 8
-        
+
         photoImageView.snp.makeConstraints { make in
             make.left.right.top.bottom.equalToSuperview()
         }
@@ -86,7 +86,7 @@ extension ImageGalleryScreenView: UICollectionViewDelegate, UICollectionViewData
         cell.photoImageView.sd_setImage(with: URL(string: viewModel?.photos[indexPath.row].urls.regular ?? ""))
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         viewModel?.pushDetails(id: indexPath.row)
     }
