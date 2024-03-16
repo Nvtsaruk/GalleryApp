@@ -26,7 +26,9 @@ final class FooterView: UICollectionReusableView {
   func toggleLoading(isEnabled: Bool) {
     if isEnabled {
       activityIndicator.startAnimating()
+        print("Start")
     } else {
+        print("Stop")
       activityIndicator.stopAnimating()
     }
   }

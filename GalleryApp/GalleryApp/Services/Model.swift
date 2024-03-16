@@ -1,13 +1,23 @@
 import Foundation
 
-struct PhotoArray: Decodable, Hashable {
+struct PhotoArray: Decodable {
+    let uuid = UUID()
     let id: String
     struct Urls: Decodable, Hashable {
-        var regular: String
+        let regular: String
     }
-    var description: String?
+    let description: String?
     let urls: Urls
+    
 }
+extension PhotoArray: Hashable {
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(uuid)
+        }
+        static func ==(lhs: PhotoArray, rhs: PhotoArray) -> Bool {
+                return lhs.uuid == rhs.uuid
+        }
+    }
 
 struct PhotoList: Decodable {
     var id: String

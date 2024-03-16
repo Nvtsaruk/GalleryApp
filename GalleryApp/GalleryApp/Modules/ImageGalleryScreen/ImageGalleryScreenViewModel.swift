@@ -9,14 +9,23 @@ final class ImageGalleryScreenViewModel {
     var coordinator: CoordinatorProtocol?
     let apiService = ApiService()
     private var cancellable: Set<AnyCancellable> = []
-    @Published var photos: [PhotoArray] = []
+    @Published var photos: [PhotoArray] = [] {
+        didSet {
+            print(photos.count)
+        }
+    }
+    var page = 1 {
+        didSet {
+            print(page)
+        }
+    }
 //    var photosPublisher: Published<[PhotoList]>.Publisher { $photos }
     func getData() {
-        apiService.getPhotos(page: 1)
+        apiService.getPhotos(page: page)
             .sink { error in
                 print(error)
             } receiveValue: { photos in
-                self.photos = photos
+                self.photos.append(contentsOf: photos)
             }.store(in: &cancellable)
     }
     

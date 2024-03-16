@@ -9,6 +9,7 @@ class ImageGalleryScreenView: UIViewController {
     private var dataSource: UICollectionViewDiffableDataSource<Section, PhotoArray>!
     private var layout: UICollectionViewCompositionalLayout!
     private var cancellable: Set<AnyCancellable> = []
+    private var isPaginating = false
     //    var collectionView = UICollectionView()
     //    private lazy var photoView: UICollectionView = {
     //            let layout = UICollectionViewFlowLayout()
@@ -111,6 +112,7 @@ extension ImageGalleryScreenView {
         photoView.snp.makeConstraints { make in
             make.left.right.top.bottom.equalTo(self.view)
         }
+        photoView.backgroundColor = .lightGray
     }
     
     private func setupDataSource() {
@@ -130,8 +132,19 @@ extension ImageGalleryScreenView {
           guard let footerView = self.photoView.dequeueReusableSupplementaryView(
             ofKind: UICollectionView.elementKindSectionFooter,
             withReuseIdentifier: FooterView.identifier, for: indexPath) as? FooterView else { fatalError() }
-//          footerView.toggleLoading(isEnabled: isPaginating)
+          footerView.toggleLoading(isEnabled: isPaginating)
           return footerView
+        }
+      }
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.item == (viewModel?.photos.count ?? 0) - 1 {
+          print("last reached. paginate now")
+          isPaginating = true
+            viewModel?.page += 1
+            viewModel?.getData()
+//          fetchProducts { [weak self] in
+//            self?.isPaginating = false
+//          }
         }
       }
 }
