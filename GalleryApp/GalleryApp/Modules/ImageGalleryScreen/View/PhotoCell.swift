@@ -1,5 +1,6 @@
 import UIKit
 final class PhotoCell: UICollectionViewCell {
+    static let identifier = "PhotoCell"
     private let photoImageView = UIImageView()
     override init(frame: CGRect) {
         super.init(frame: frame)

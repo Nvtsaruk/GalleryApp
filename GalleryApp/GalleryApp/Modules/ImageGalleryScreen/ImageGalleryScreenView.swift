@@ -26,12 +26,14 @@ class ImageGalleryScreenView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("In view did load")
+        setupNavigationTitle()
         configUI()
         viewModel?.getData()
-        
         setupBind()
-        
+    }
+    private func setupNavigationTitle() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+            navigationItem.title = "Gallery App"
     }
 
     private func setupBind() {
@@ -47,8 +49,6 @@ class ImageGalleryScreenView: UIViewController {
     }
 
     private func configUI() {
-        print("In config ui")
-        self.title = "Gallery App"
         view.backgroundColor = .lightGray
         activityView.style = .large
         view.addSubview(activityView)
@@ -57,7 +57,7 @@ class ImageGalleryScreenView: UIViewController {
         }
         activityView.startAnimating()
         view.addSubview(photoView)
-        photoView.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")
+        photoView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.identifier)
         photoView.snp.makeConstraints { make in
 ////            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(30)
 ////            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(30)
@@ -73,7 +73,7 @@ extension ImageGalleryScreenView: UICollectionViewDelegate, UICollectionViewData
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = photoView.dequeueReusableCell(withReuseIdentifier: "photoCell",
+        guard let cell = photoView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier,
                                                        for: indexPath) as? PhotoCell,
               let url = URL(string: viewModel?.photos[indexPath.row].urls.regular ?? "")
         else { return UICollectionViewCell()}
