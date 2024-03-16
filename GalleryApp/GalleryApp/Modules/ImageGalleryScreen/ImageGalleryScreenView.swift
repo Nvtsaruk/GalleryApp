@@ -54,37 +54,18 @@ class ImageGalleryScreenView: UIViewController {
     }
 }
 
-final class PhotoCell: UICollectionViewCell {
-    let photoImageView = UIImageView()
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configUI()
-    }
-    private func configUI() {
-        addSubview(photoImageView)
-        photoImageView.contentMode = .scaleAspectFill
-        photoImageView.clipsToBounds = true
-        photoImageView.layer.cornerRadius = 8
-
-        photoImageView.snp.makeConstraints { make in
-            make.left.right.top.bottom.equalToSuperview()
-        }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 extension ImageGalleryScreenView: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel?.photos.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = photoView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell else { return UICollectionViewCell()}
-        cell.photoImageView.sd_setImage(with: URL(string: viewModel?.photos[indexPath.row].urls.regular ?? ""))
-        cell.photoImageView.heroID = String(indexPath.row)
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = photoView.dequeueReusableCell(withReuseIdentifier: "photoCell",
+                                                       for: indexPath) as? PhotoCell,
+              let url = URL(string: viewModel?.photos[indexPath.row].urls.regular ?? "")
+        else { return UICollectionViewCell()}
+        cell.configure(url: url, heroId: String(indexPath.row))
         return cell
     }
 
