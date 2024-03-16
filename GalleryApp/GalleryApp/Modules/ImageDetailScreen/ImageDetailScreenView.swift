@@ -26,6 +26,7 @@ class ImageDetailScreenView: UIViewController {
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
         photoImageView.layer.cornerRadius = 8
+        photoImageView.heroID = String(viewModel?.id ?? 0)
         detailView.addSubview(descriptionLabel)
         view.addSubview(detailView)
         detailView.snp.makeConstraints { make in

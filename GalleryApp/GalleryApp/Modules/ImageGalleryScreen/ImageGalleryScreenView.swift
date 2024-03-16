@@ -84,6 +84,7 @@ extension ImageGalleryScreenView: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = photoView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell else { return UICollectionViewCell()}
         cell.photoImageView.sd_setImage(with: URL(string: viewModel?.photos[indexPath.row].urls.regular ?? ""))
+        cell.photoImageView.heroID = String(indexPath.row)
         return cell
     }
 
