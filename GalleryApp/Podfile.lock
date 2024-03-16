@@ -1,0 +1,30 @@
+PODS:
+  - Hero (1.6.3)
+  - SDWebImage (5.18.10):
+    - SDWebImage/Core (= 5.18.10)
+  - SDWebImage/Core (5.18.10)
+  - SnapKit (5.7.1)
+  - SwiftLint (0.54.0)
+
+DEPENDENCIES:
+  - Hero
+  - SDWebImage (~> 5.0)
+  - SnapKit (~> 5.7.0)
+  - SwiftLint
+
+SPEC REPOS:
+  trunk:
+    - Hero
+    - SDWebImage
+    - SnapKit
+    - SwiftLint
+
+SPEC CHECKSUMS:
+  Hero: 419d43384355b3168512bd8ac6a33aadd3dc575b
+  SDWebImage: fc8f2d48bbfd72ef39d70e981bd24a3f3be53fec
+  SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SwiftLint: c1de071d9d08c8aba837545f6254315bc900e211
+
+PODFILE CHECKSUM: 33c542be30bb6d7e81dbfa0adb43dc3cb5492420
+
+COCOAPODS: 1.15.2
