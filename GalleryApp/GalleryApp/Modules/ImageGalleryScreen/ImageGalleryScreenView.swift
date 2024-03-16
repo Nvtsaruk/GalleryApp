@@ -22,12 +22,16 @@ class ImageGalleryScreenView: UIViewController {
 //            collectionView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
             return collectionView
         }()
+    let activityView = UIActivityIndicatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel?.getData()
+        print("In view did load")
         configUI()
+        viewModel?.getData()
+        
         setupBind()
+        
     }
 
     private func setupBind() {
@@ -36,18 +40,27 @@ class ImageGalleryScreenView: UIViewController {
             .sink { error in
             print(error)
         } receiveValue: { _ in
+            self.activityView.stopAnimating()
             self.photoView.reloadData()
         }.store(in: &cancellable)
 
     }
 
     private func configUI() {
+        print("In config ui")
         self.title = "Gallery App"
+        view.backgroundColor = .lightGray
+        activityView.style = .large
+        view.addSubview(activityView)
+        activityView.snp.makeConstraints { make in
+            make.center.equalTo(view.snp.center)
+        }
+        activityView.startAnimating()
         view.addSubview(photoView)
         photoView.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")
         photoView.snp.makeConstraints { make in
-//            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(30)
-//            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(30)
+////            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(30)
+////            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(30)
             make.left.right.top.bottom.equalTo(self.view)
         }
     }

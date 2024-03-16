@@ -12,6 +12,7 @@ final class ImageGalleryScreenViewModel: ImageGalleryScreenViewModelProtocol {
     @Published var photos: [PhotoList] = []
     var photosPublisher: Published<[PhotoList]>.Publisher { $photos }
     func getData() {
+        print("In view model get data")
         apiService.getPhotos(page: 1)
             .sink { error in
                 print(error)

@@ -11,8 +11,57 @@ class ImageDetailScreenView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupGestures()
     }
+    
+    private func setupGestures() {
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
+            swipeRight.direction = .right
+            self.view.addGestureRecognizer(swipeRight)
 
+            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
+            swipeDown.direction = .left
+            self.view.addGestureRecognizer(swipeDown)
+    }
+    @objc func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+
+            switch swipeGesture.direction {
+            case .right:
+                    viewModel?.id! -= 1
+                    UIView.transition(with: self.photoImageView,
+                                              duration: 1.0,
+                                      options: .transitionFlipFromLeft,
+                                              animations: {
+                        self.photoImageView.sd_setImage(with: URL(string: self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""))
+                            }, completion: nil)
+                    UIView.transition(with: self.detailView,
+                                              duration: 1.0,
+                                      options: .transitionCrossDissolve,
+                                              animations: {
+                        self.descriptionLabel.text = self.viewModel?.photos[self.viewModel?.id ?? 0].description ?? "No description"
+                            }, completion: nil)
+            case .left:
+                    viewModel?.id! += 1
+                    UIView.transition(with: self.photoImageView,
+                                              duration: 1.0,
+                                      options: .transitionFlipFromRight,
+                                              animations: {
+                        self.photoImageView.sd_setImage(with: URL(string: self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""))
+                            }, completion: nil)
+                    UIView.transition(with: self.detailView,
+                                              duration: 1.0,
+                                      options: .transitionCrossDissolve,
+                                              animations: {
+                        self.descriptionLabel.text = self.viewModel?.photos[self.viewModel?.id ?? 0].description ?? "No description"
+                            }, completion: nil)
+            default:
+                break
+            }
+        }
+    }
+    
     private func setupUI() {
         view.backgroundColor = .white
         view.addSubview(photoImageView)
