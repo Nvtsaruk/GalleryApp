@@ -14,12 +14,12 @@ class ImageGalleryScreenView: UIViewController {
             layout.itemSize = CGSize(width: view.frame.width/3, height: view.frame.width/3)
             layout.scrollDirection = .vertical
             layout.minimumInteritemSpacing = 0
-            let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .null, collectionViewLayout: layout)
             collectionView.delegate = self
             collectionView.dataSource = self
             collectionView.backgroundColor = .lightGray
-            collectionView.showsHorizontalScrollIndicator = false
-            collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            collectionView.showsVerticalScrollIndicator = false
+//            collectionView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
             return collectionView
         }()
 
@@ -46,10 +46,9 @@ class ImageGalleryScreenView: UIViewController {
         view.addSubview(photoView)
         photoView.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")
         photoView.snp.makeConstraints { make in
-            make.top.equalTo(self.view)
-            make.bottom.equalTo(self.view)
-            make.left.equalTo(self.view)
-            make.right.equalTo(self.view)
+//            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(30)
+//            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(30)
+            make.left.right.top.bottom.equalTo(self.view)
         }
     }
 }

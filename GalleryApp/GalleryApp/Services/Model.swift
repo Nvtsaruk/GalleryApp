@@ -1,6 +1,7 @@
 import Foundation
 struct PhotoList: Decodable {
     var id: String
+//    var slug: String
     var created_at: String
     var updated_at: String
     var width: Int

@@ -18,7 +18,8 @@ class ImageDetailScreenView: UIViewController {
         view.addSubview(photoImageView)
         photoImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.left.right.equalTo(self.view)
+            make.left.equalTo(self.view).offset(5)
+            make.right.equalTo(self.view).offset(-5)
             make.height.equalTo(self.view.frame.width)
         }
         print(viewModel?.id)
@@ -31,12 +32,18 @@ class ImageDetailScreenView: UIViewController {
         view.addSubview(detailView)
         detailView.snp.makeConstraints { make in
             make.top.equalTo(photoImageView.snp.bottom)
-            make.left.right.bottom.equalTo(self.view)
+            make.left.equalTo(view).offset(5)
+            make.right.equalTo(view).offset(-5)
+            make.bottom.equalTo(self.view)
         }
+        detailView.heroModifiers = [.fade, .translate(x:0, y:400)]
         descriptionLabel.snp.makeConstraints { make in
-            make.left.right.top.equalTo(detailView).offset(10)
+            make.left.top.equalTo(detailView).offset(10)
+            make.right.equalTo(detailView).offset(-10)
         }
         detailView.backgroundColor = .lightGray
+        descriptionLabel.lineBreakMode = .byWordWrapping
+        descriptionLabel.numberOfLines = 3
         descriptionLabel.text = viewModel?.photos[viewModel?.id ?? 0].description ?? "No description"
     }
 }
