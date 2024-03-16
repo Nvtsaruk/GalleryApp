@@ -1,4 +1,14 @@
 import Foundation
+
+struct PhotoArray: Decodable, Hashable {
+    let id: String
+    struct Urls: Decodable, Hashable {
+        var regular: String
+    }
+    var description: String?
+    let urls: Urls
+}
+
 struct PhotoList: Decodable {
     var id: String
 //    var slug: String
@@ -41,7 +51,20 @@ struct PhotoList: Decodable {
     //      },
     //      // ... more photos
 }
-struct Urls: Decodable {
+//extension PhotoList: Identifiable, Hashable {
+//    var identifier: String {
+//        return UUID().uuidString
+//    }
+//    
+//    public func hash(into hasher: inout Hasher) {
+//        return hasher.combine(identifier)
+//    }
+//    
+//    public static func == (lhs: PhotoList, rhs: PhotoList) -> Bool {
+//        return lhs.identifier == rhs.identifier
+//    }
+//}
+struct Urls: Decodable, Hashable {
     var raw: String
     var full: String
     var regular: String

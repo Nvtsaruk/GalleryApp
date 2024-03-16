@@ -2,7 +2,7 @@ import UIKit
 import Hero
 protocol CoordinatorProtocol {
     func start()
-    func pushDetailsView(id: Int, photos: [PhotoList])
+    func pushDetailsView(id: Int, photos: [PhotoArray])
 }
 final class Coordinator: CoordinatorProtocol {
 
@@ -18,7 +18,7 @@ final class Coordinator: CoordinatorProtocol {
         navigationController.pushViewController(imageGalleryViewController, animated: true)
     }
 
-    func pushDetailsView(id: Int, photos: [PhotoList]) {
+    func pushDetailsView(id: Int, photos: [PhotoArray]) {
         let detailsViewController = ImageDetailScreenView()
         let viewModel = ImageDetailsScreenViewModel()
         viewModel.coordinator = self

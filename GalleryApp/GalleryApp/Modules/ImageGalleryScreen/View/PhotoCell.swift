@@ -6,9 +6,13 @@ final class PhotoCell: UICollectionViewCell {
         super.init(frame: frame)
         configUI()
     }
-    func configure(url: URL, heroId: String) {
-        photoImageView.sd_setImage(with: url)
-        photoImageView.heroID = heroId
+//    func configure(url: URL, heroId: String) {
+//        photoImageView.sd_setImage(with: url)
+//        photoImageView.heroID = heroId
+//    }
+    func configure(index: String, item: PhotoArray) {
+        photoImageView.sd_setImage(with: URL(string: item.urls.regular))
+        photoImageView.heroID = index
     }
     private func configUI() {
         addSubview(photoImageView)
