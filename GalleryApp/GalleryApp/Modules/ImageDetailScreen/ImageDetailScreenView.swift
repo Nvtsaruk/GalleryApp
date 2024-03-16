@@ -1,22 +1,17 @@
-//
-//  ImageDetailScreenView.swift
-//  GalleryApp
-//
-//  Created by Tsaruk Nick on 14.03.24.
-//
-
 import UIKit
+import Combine
 
 class ImageDetailScreenView: UIViewController {
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    var viewModel = ImageDetailsScreenViewModel()
+    private var cancellable: Set<AnyCancellable> = []
+    lazy var photoImageView = UIImageView()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
     }
-    */
-
+    
+    private func setupUI() {
+        
+    }
 }

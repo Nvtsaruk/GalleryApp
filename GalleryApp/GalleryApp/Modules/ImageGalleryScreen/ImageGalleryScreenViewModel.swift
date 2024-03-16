@@ -20,4 +20,8 @@ final class ImageGalleryScreenViewModel: ImageGalleryScreenViewModelProtocol {
             }.store(in: &cancellable)
 
     }
+    func pushDetails(id: Int) {
+        print(id)
+        coordinator?.pushDetailsView()
+    }
 }

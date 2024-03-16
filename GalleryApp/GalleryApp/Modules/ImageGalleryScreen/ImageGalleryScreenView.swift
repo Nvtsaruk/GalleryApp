@@ -5,7 +5,7 @@ import Combine
 
 class ImageGalleryScreenView: UIViewController {
 
-    var viewModel = ImageGalleryScreenViewModel()
+    var viewModel: ImageGalleryScreenViewModel?
     private var cancellable: Set<AnyCancellable> = []
 //    var collectionView = UICollectionView()
     private lazy var photoView: UICollectionView = {
@@ -25,13 +25,13 @@ class ImageGalleryScreenView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.getData()
+        viewModel?.getData()
         configUI()
         setupBind()
     }
     
     private func setupBind() {
-        viewModel.$photos
+        viewModel?.$photos
             .receive(on: DispatchQueue.main)
             .sink { error in
             print(error)
@@ -77,17 +77,17 @@ final class PhotoCell: UICollectionViewCell {
 
 extension ImageGalleryScreenView: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.photos.count
+        return viewModel?.photos.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = photoView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell else { return UICollectionViewCell()}
-        cell.photoImageView.sd_setImage(with: URL(string: viewModel.photos[indexPath.row].urls.regular))
+        cell.photoImageView.sd_setImage(with: URL(string: viewModel?.photos[indexPath.row].urls.regular ?? ""))
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(viewModel.photos[indexPath.row].id)
+        viewModel?.pushDetails(id: indexPath.row)
     }
 
 }
