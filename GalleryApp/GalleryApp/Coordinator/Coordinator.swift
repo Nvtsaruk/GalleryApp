@@ -19,6 +19,8 @@ final class Coordinator: CoordinatorProtocol {
         let detailsViewController = ImageDetailScreenView()
         let viewModel = ImageDetailsScreenViewModel()
         viewModel.coordinator = self
+        viewModel.id = id
+        viewModel.photos = photos
         detailsViewController.viewModel = viewModel
         navigationController.pushViewController(detailsViewController, animated: true)
     }

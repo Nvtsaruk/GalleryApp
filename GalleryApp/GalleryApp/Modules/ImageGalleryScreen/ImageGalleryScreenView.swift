@@ -42,6 +42,7 @@ class ImageGalleryScreenView: UIViewController {
     }
 
     private func configUI() {
+        self.title = "Gallery App"
         view.addSubview(photoView)
         photoView.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")
         photoView.snp.makeConstraints { make in

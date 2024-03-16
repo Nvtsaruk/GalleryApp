@@ -22,6 +22,6 @@ final class ImageGalleryScreenViewModel: ImageGalleryScreenViewModelProtocol {
     }
     func pushDetails(id: Int) {
         print(id)
-        coordinator?.pushDetailsView()
+        coordinator?.pushDetailsView(id: id, photos: photos)
     }
 }
