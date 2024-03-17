@@ -10,21 +10,7 @@ class ImageGalleryScreenView: UIViewController {
     private var layout: UICollectionViewCompositionalLayout!
     private var cancellable: Set<AnyCancellable> = []
     private var isPaginating = false
-    //    var collectionView = UICollectionView()
-    //    private lazy var photoView: UICollectionView = {
-    //            let layout = UICollectionViewFlowLayout()
-    ////        layout.estimatedItemSize = CGSize(width: view.frame.width/3, height: view.frame.width/3)
-    //            layout.itemSize = CGSize(width: view.frame.width/3, height: view.frame.width/3)
-    //            layout.scrollDirection = .vertical
-    //            layout.minimumInteritemSpacing = 0
-    //        let collectionView = UICollectionView(frame: .null, collectionViewLayout: layout)
-    //            collectionView.delegate = self
-    //            collectionView.dataSource = self
-    //            collectionView.backgroundColor = .lightGray
-    //            collectionView.showsVerticalScrollIndicator = false
-    ////            collectionView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-    //            return collectionView
-    //        }()
+    
     private var photoView: UICollectionView! = nil
     
     override func viewDidLoad() {
@@ -41,24 +27,14 @@ class ImageGalleryScreenView: UIViewController {
         navigationItem.title = "Gallery App"
     }
     
-//    private func setupBind() {
-//        viewModel?.$photos
-//            .receive(on: DispatchQueue.main)
-//            .sink { error in
-//                print(error)
-//            } receiveValue: { photo in
-//                self.photoView.reloadData()
-//            }.store(in: &cancellable)
-//        
-//    }
     private func observe() {
         viewModel?.$photos
-          .filter { !$0.isEmpty }
-          .receive(on: DispatchQueue.main)
-          .sink { [weak self] photo in
-            self?.reloadSnapshot()
-        }.store(in: &cancellable)
-      }
+            .filter { !$0.isEmpty }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] photo in
+                self?.reloadSnapshot()
+            }.store(in: &cancellable)
+    }
     
     private func reloadSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, PhotoArray>()
@@ -66,12 +42,10 @@ class ImageGalleryScreenView: UIViewController {
         guard let photos = viewModel?.photos else { return }
         snapshot.appendItems(photos, toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: false)
-      }
+    }
     
     private func configUI() {
         view.backgroundColor = .lightGray
-        
-        
     }
 }
 
@@ -86,21 +60,42 @@ extension ImageGalleryScreenView: UICollectionViewDelegate {
 extension ImageGalleryScreenView {
     enum Section: Int, CaseIterable {
         case main
-      }
+    }
     
     private func createLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
-        //        layout.estimatedItemSize = CGSize(width: view.frame.width/3, height: view.frame.width/3)
-        layout.itemSize = CGSize(width: view.frame.width/3, height: view.frame.width/3)
-        layout.scrollDirection = .vertical
+        let width = (view.frame.width/3)-5
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        layout.itemSize = CGSize(width: width, height: width)
         layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 3
+        layout.scrollDirection = .vertical
         return layout
+    }
+    private func fixedSpacedFlowLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .estimated(view.frame.width/3 - 2),
+            heightDimension: .estimated(view.frame.width/3 - 2)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.edgeSpacing = NSCollectionLayoutEdgeSpacing(
+            leading: .fixed(1),
+            top: .fixed(1),
+            trailing: .fixed(1),
+            bottom: .fixed(1)
+        )
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(100)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        return UICollectionViewCompositionalLayout(section: section)
     }
     
     private func configureCollectionViewLayout() {
         photoView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         photoView.delegate = self
-        
         photoView.register(
             PhotoCell.self,
             forCellWithReuseIdentifier: PhotoCell.identifier)
@@ -117,54 +112,31 @@ extension ImageGalleryScreenView {
     
     private func setupDataSource() {
         dataSource = .init(collectionView: photoView) { collectionView, indexPath, item in
-          guard let section = Section(rawValue: indexPath.section) else { return UICollectionViewCell() }
-          switch section {
-            case .main:
-            let cell = collectionView.dequeueReusableCell(
-              withReuseIdentifier: PhotoCell.identifier,
-              for: indexPath) as? PhotoCell
-                  cell?.configure(index: String(indexPath.row), item: item)
-            return cell
-          }
+            guard let section = Section(rawValue: indexPath.section) else { return UICollectionViewCell() }
+            switch section {
+                case .main:
+                    let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: PhotoCell.identifier,
+                        for: indexPath) as? PhotoCell
+                    cell?.configure(index: String(indexPath.row), item: item)
+                    return cell
+            }
         }
-
+        
         dataSource.supplementaryViewProvider = { [unowned self] (collectionView, kind, indexPath) in
-          guard let footerView = self.photoView.dequeueReusableSupplementaryView(
-            ofKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: FooterView.identifier, for: indexPath) as? FooterView else { fatalError() }
-          footerView.toggleLoading(isEnabled: isPaginating)
-          return footerView
+            guard let footerView = self.photoView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionView.elementKindSectionFooter,
+                withReuseIdentifier: FooterView.identifier, for: indexPath) as? FooterView else { fatalError() }
+            footerView.toggleLoading(isEnabled: isPaginating)
+            return footerView
         }
-      }
+    }
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item == (viewModel?.photos.count ?? 0) - 1 {
-          print("last reached. paginate now")
-          isPaginating = true
+            print("last reached. paginate now")
+            isPaginating = true
             viewModel?.page += 1
             viewModel?.getData()
-//          fetchProducts { [weak self] in
-//            self?.isPaginating = false
-//          }
         }
-      }
+    }
 }
-//extension ImageGalleryScreenView: UICollectionViewDelegate, UICollectionViewDataSource {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return viewModel?.photos.count ?? 0
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView,
-//                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = photoView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier,
-//                                                       for: indexPath) as? PhotoCell,
-//              let url = URL(string: viewModel?.photos[indexPath.row].urls.regular ?? "")
-//        else { return UICollectionViewCell()}
-//        cell.configure(url: url, heroId: String(indexPath.row))
-//        return cell
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        viewModel?.pushDetails(id: indexPath.row)
-//    }
-//
-//}

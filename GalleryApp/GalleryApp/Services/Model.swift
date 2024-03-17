@@ -4,7 +4,11 @@ struct PhotoArray: Decodable {
     let uuid = UUID()
     let id: String
     struct Urls: Decodable, Hashable {
+        let raw: String
+        let full: String
         let regular: String
+        let small: String
+        let thumb: String
     }
     let description: String?
     let urls: Urls
