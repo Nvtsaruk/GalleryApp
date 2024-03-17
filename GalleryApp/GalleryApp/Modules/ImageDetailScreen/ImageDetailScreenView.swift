@@ -2,12 +2,16 @@ import UIKit
 import Combine
 import SDWebImage
 
+enum LabelType {
+    case title
+    case label
+}
+
 class ImageDetailScreenView: UIViewController {
     var viewModel: ImageDetailsScreenViewModel?
     private var cancellable: Set<AnyCancellable> = []
     lazy var photoImageView = UIImageView()
-    lazy var detailView = UIView()
-    lazy var descriptionLabel = UILabel()
+    lazy var detailView = DetailView()
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -26,7 +30,6 @@ class ImageDetailScreenView: UIViewController {
     @objc func respondToSwipeGesture(gesture: UIGestureRecognizer) {
 
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-
             switch swipeGesture.direction {
             case .right:
                     viewModel?.id! -= 1
@@ -34,27 +37,31 @@ class ImageDetailScreenView: UIViewController {
                                               duration: 1.0,
                                       options: .transitionFlipFromLeft,
                                               animations: {
-                        self.photoImageView.sd_setImage(with: URL(string: self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""))
+                        let imageUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""
+                        self.photoImageView.sd_setImage(with: URL(string: imageUrl))
                             }, completion: nil)
                     UIView.transition(with: self.detailView,
                                               duration: 1.0,
                                       options: .transitionCrossDissolve,
                                               animations: {
-                        self.descriptionLabel.text = self.viewModel?.photos[self.viewModel?.id ?? 0].description ?? "No description"
-                            }, completion: nil)
+                        let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
+                        self.detailView.descriptionLabel.text = description ?? "No description"
+                    }, completion: nil)
             case .left:
                     viewModel?.id! += 1
                     UIView.transition(with: self.photoImageView,
                                               duration: 1.0,
                                       options: .transitionFlipFromRight,
                                               animations: {
-                        self.photoImageView.sd_setImage(with: URL(string: self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""))
+                        let imageUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""
+                        self.photoImageView.sd_setImage(with: URL(string: imageUrl))
                             }, completion: nil)
                     UIView.transition(with: self.detailView,
                                               duration: 1.0,
                                       options: .transitionCrossDissolve,
                                               animations: {
-                        self.descriptionLabel.text = self.viewModel?.photos[self.viewModel?.id ?? 0].description ?? "No description"
+                        let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
+                        self.detailView.descriptionLabel.text = description ?? "No description"
                             }, completion: nil)
             default:
                 break
@@ -63,36 +70,50 @@ class ImageDetailScreenView: UIViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = AppColors.background.color
+        
         view.addSubview(photoImageView)
+        photoImageView.sd_setImage(with: URL(string: viewModel?.photos[viewModel?.id ?? 0].urls.regular ?? ""))
+        photoImageView.contentMode = .scaleAspectFill
+        photoImageView.clipsToBounds = true
+        photoImageView.layer.cornerRadius = 16
+        photoImageView.heroID = String(viewModel?.id ?? 0)
+        
+        view.addSubview(detailView)
+        detailView.heroModifiers = [.fade, .translate(x: 0, y: 400)]
+        detailView.backgroundColor = AppColors.descriptionBackground.color
+        detailView.layer.cornerRadius = 16
+        
+        detailView.descriptionTitle.text = "Description"
+        detailView.descriptionTitle.textColor = AppColors.descriptionTitleTextColor.color
+        
+        detailView.descriptionLabel.lineBreakMode = .byWordWrapping
+        detailView.descriptionLabel.numberOfLines = 3
+        
+        detailView.descriptionLabel.text = viewModel?.photos[viewModel?.id ?? 0].description ?? "No description"
+        detailView.descriptionLabel.textColor = AppColors.mainTextColor.color
+        
+        detailView.sizeTitle.text = "Size"
+        detailView.sizeTitle.textColor = AppColors.descriptionTitleTextColor.color
+        
+        guard let width = viewModel?.photos[viewModel?.id ?? 0].width,
+              let height = viewModel?.photos[viewModel?.id ?? 0].height else { return }
+        detailView.sizeLabel.text = "\(width)x\(height)px"
+        detailView.sizeLabel.textColor = AppColors.mainTextColor.color
+        setupConstraints()
+    }
+    private func setupConstraints() {
         photoImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.left.equalTo(self.view).offset(5)
             make.right.equalTo(self.view).offset(-5)
             make.height.equalTo(self.view.frame.width)
         }
-        print(viewModel?.id)
-        photoImageView.sd_setImage(with: URL(string: viewModel?.photos[viewModel?.id ?? 0].urls.regular ?? ""))
-        photoImageView.contentMode = .scaleAspectFill
-        photoImageView.clipsToBounds = true
-        photoImageView.layer.cornerRadius = 8
-        photoImageView.heroID = String(viewModel?.id ?? 0)
-        detailView.addSubview(descriptionLabel)
-        view.addSubview(detailView)
         detailView.snp.makeConstraints { make in
             make.top.equalTo(photoImageView.snp.bottom)
             make.left.equalTo(view).offset(5)
             make.right.equalTo(view).offset(-5)
             make.bottom.equalTo(self.view)
         }
-        detailView.heroModifiers = [.fade, .translate(x:0, y:400)]
-        descriptionLabel.snp.makeConstraints { make in
-            make.left.top.equalTo(detailView).offset(10)
-            make.right.equalTo(detailView).offset(-10)
-        }
-        detailView.backgroundColor = .lightGray
-        descriptionLabel.lineBreakMode = .byWordWrapping
-        descriptionLabel.numberOfLines = 3
-        descriptionLabel.text = viewModel?.photos[viewModel?.id ?? 0].description ?? "No description"
     }
 }

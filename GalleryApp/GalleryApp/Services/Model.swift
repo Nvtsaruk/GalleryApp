@@ -10,6 +10,8 @@ struct PhotoArray: Decodable {
         let small: String
         let thumb: String
     }
+    let width: Int
+    let height: Int
     let description: String?
     let urls: Urls
     
@@ -65,19 +67,7 @@ struct PhotoList: Decodable {
     //      },
     //      // ... more photos
 }
-//extension PhotoList: Identifiable, Hashable {
-//    var identifier: String {
-//        return UUID().uuidString
-//    }
-//    
-//    public func hash(into hasher: inout Hasher) {
-//        return hasher.combine(identifier)
-//    }
-//    
-//    public static func == (lhs: PhotoList, rhs: PhotoList) -> Bool {
-//        return lhs.identifier == rhs.identifier
-//    }
-//}
+
 struct Urls: Decodable, Hashable {
     var raw: String
     var full: String

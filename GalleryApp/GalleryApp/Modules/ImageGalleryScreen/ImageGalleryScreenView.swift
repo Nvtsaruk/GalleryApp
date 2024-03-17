@@ -22,9 +22,14 @@ class ImageGalleryScreenView: UIViewController {
         viewModel?.getData()
         observe()
     }
+    
     private func setupNavigationTitle() {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Gallery App"
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [.foregroundColor: AppColors.headerColor.color]
+        appearance.largeTitleTextAttributes = [.foregroundColor: AppColors.headerColor.color]
+        navigationItem.standardAppearance = appearance
     }
     
     private func observe() {
