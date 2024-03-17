@@ -70,10 +70,13 @@ class ImageDetailScreenView: UIViewController {
     }
     
     private func setupUI() {
+        print("URL",SDImageCache.shared.imageFromCache(forKey: viewModel?.photos[viewModel?.id ?? 0].urls.small ?? ""))
         view.backgroundColor = AppColors.background.color
         
         view.addSubview(photoImageView)
-        photoImageView.sd_setImage(with: URL(string: viewModel?.photos[viewModel?.id ?? 0].urls.regular ?? ""))
+        photoImageView.sd_setImage(with: URL(string: viewModel?.photos[viewModel?.id ?? 0].urls.regular ?? ""),
+                                   placeholderImage: SDImageCache.shared.imageFromCache(forKey: viewModel?.photos[viewModel?.id ?? 0].urls.small ?? ""))
+//        photoImageView.sd_setImage(with: URL(string: viewModel?.photos[viewModel?.id ?? 0].urls.regular ?? ""))
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
         photoImageView.layer.cornerRadius = 16

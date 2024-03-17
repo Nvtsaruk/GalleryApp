@@ -20,7 +20,7 @@ final class ImageGalleryScreenViewModel {
             }.store(in: &cancellable)
     }
     
-    func pushDetails(id: Int) {
-        coordinator?.pushDetailsView(id: id, photos: photos)
+    func pushDetails(id: Int, currentImage: Data) {
+        coordinator?.pushDetailsView(id: id, photos: photos, currentImage: currentImage)
     }
 }
