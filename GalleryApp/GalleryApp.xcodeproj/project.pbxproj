@@ -22,6 +22,7 @@
 		CC9C67962BA3363B002B6EE0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C67952BA3363B002B6EE0 /* Model.swift */; };
 		CC9C67992BA5843D002B6EE0 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C67982BA5843D002B6EE0 /* PhotoCell.swift */; };
 		CC9C679B2BA5AD9F002B6EE0 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C679A2BA5AD9F002B6EE0 /* FooterView.swift */; };
+		CC9C679E2BA6E33B002B6EE0 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9C679D2BA6E33B002B6EE0 /* AppConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		CC9C67952BA3363B002B6EE0 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		CC9C67982BA5843D002B6EE0 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		CC9C679A2BA5AD9F002B6EE0 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
+		CC9C679D2BA6E33B002B6EE0 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +155,7 @@
 		CC9C67872BA2F45E002B6EE0 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				CC9C679C2BA6E328002B6EE0 /* AppConstants */,
 				CC4AACA72BA1D67C004746CC /* Assets.xcassets */,
 				CC4AACA92BA1D67C004746CC /* LaunchScreen.storyboard */,
 				CC4AACAC2BA1D67C004746CC /* Info.plist */,
@@ -169,6 +172,14 @@
 				CC9C679A2BA5AD9F002B6EE0 /* FooterView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		CC9C679C2BA6E328002B6EE0 /* AppConstants */ = {
+			isa = PBXGroup;
+			children = (
+				CC9C679D2BA6E33B002B6EE0 /* AppConstants.swift */,
+			);
+			path = AppConstants;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -311,6 +322,7 @@
 				CC9C67962BA3363B002B6EE0 /* Model.swift in Sources */,
 				CC9C678D2BA32107002B6EE0 /* ImageDetailScreenView.swift in Sources */,
 				CC4AAC9F2BA1D67B004746CC /* AppDelegate.swift in Sources */,
+				CC9C679E2BA6E33B002B6EE0 /* AppConstants.swift in Sources */,
 				CC9C67932BA33620002B6EE0 /* APIService.swift in Sources */,
 				CC9C679B2BA5AD9F002B6EE0 /* FooterView.swift in Sources */,
 				CC9C67992BA5843D002B6EE0 /* PhotoCell.swift in Sources */,

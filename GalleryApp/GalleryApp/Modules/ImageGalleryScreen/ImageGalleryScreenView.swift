@@ -45,7 +45,7 @@ class ImageGalleryScreenView: UIViewController {
     }
     
     private func configUI() {
-        view.backgroundColor = .lightGray
+        view.backgroundColor = AppColors.background.color
     }
 }
 
@@ -107,7 +107,7 @@ extension ImageGalleryScreenView {
         photoView.snp.makeConstraints { make in
             make.left.right.top.bottom.equalTo(self.view)
         }
-        photoView.backgroundColor = .lightGray
+        photoView.backgroundColor = .clear
     }
     
     private func setupDataSource() {
