@@ -11,6 +11,7 @@ class ImageDetailScreenView: UIViewController {
     var viewModel: ImageDetailsScreenViewModel?
     private var cancellable: Set<AnyCancellable> = []
     lazy var photoImageView = UIImageView()
+    lazy var imageView = ImageView()
     lazy var detailView = DetailView()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +70,7 @@ class ImageDetailScreenView: UIViewController {
                           animations: {
             let imageUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""
             self.photoImageView.sd_setImage(with: URL(string: imageUrl))
+            self.photoImageView.heroID = String(self.viewModel?.photos[self.viewModel?.id ?? 0].id ?? "")
         }, completion: nil)
         UIView.transition(with: self.detailView,
                           duration: 1.0,
@@ -78,48 +80,46 @@ class ImageDetailScreenView: UIViewController {
             self.detailView.descriptionLabel.text = description ?? "No description"
         }, completion: nil)
     }
+    
     private func setupUI() {
         view.backgroundColor = AppColors.background.color
-        view.addSubview(photoImageView)
-        photoImageView.sd_setImage(with: URL(string: viewModel?.photos[viewModel?.id ?? 0].urls.regular ?? ""),
-                                   placeholderImage: SDImageCache.shared.imageFromCache(forKey: viewModel?.photos[viewModel?.id ?? 0].urls.small ?? ""))
-        photoImageView.contentMode = .scaleAspectFill
-        photoImageView.clipsToBounds = true
-        photoImageView.layer.cornerRadius = 16
-        photoImageView.heroID = String(viewModel?.id ?? 0)
+        view.addSubview(imageView)
+        guard let regularURL = viewModel?.photos[viewModel?.id ?? 0].urls.regular,
+              let smallURL = viewModel?.photos[viewModel?.id ?? 0].urls.small else { return }
+        //        photoImageView.sd_setImage(with: URL(string: regularURL),
+        //                                   placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL))
+        //        photoImageView.contentMode = .scaleAspectFill
+        //        photoImageView.clipsToBounds = true
+        //        photoImageView.layer.cornerRadius = 16
+        //        photoImageView.heroID = String(viewModel?.photos[viewModel?.id ?? 0].id ?? "")
+        imageView.configure(imageUrl: URL(string: regularURL),
+                            placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL),
+                            heroId: String(viewModel?.photos[viewModel?.id ?? 0].id ?? ""))
         
         view.addSubview(detailView)
         detailView.heroModifiers = [.fade, .translate(x: 0, y: 400)]
         detailView.backgroundColor = AppColors.descriptionBackground.color
         detailView.layer.cornerRadius = 16
         
-        detailView.descriptionTitle.text = "Description"
-        detailView.descriptionTitle.textColor = AppColors.descriptionTitleTextColor.color
-        
-        detailView.descriptionLabel.lineBreakMode = .byWordWrapping
-        detailView.descriptionLabel.numberOfLines = 3
-        
-        detailView.descriptionLabel.text = viewModel?.photos[viewModel?.id ?? 0].description ?? "No description"
-        detailView.descriptionLabel.textColor = AppColors.mainTextColor.color
-        
-        detailView.sizeTitle.text = "Size"
-        detailView.sizeTitle.textColor = AppColors.descriptionTitleTextColor.color
-        
         guard let width = viewModel?.photos[viewModel?.id ?? 0].width,
               let height = viewModel?.photos[viewModel?.id ?? 0].height else { return }
-        detailView.sizeLabel.text = "\(width)x\(height)px"
-        detailView.sizeLabel.textColor = AppColors.mainTextColor.color
+        
+        detailView.configure(descLabelText: viewModel?.photos[viewModel?.id ?? 0].description ?? "No description",
+                             width: width,
+                             height: height)
+        detailView.viewModel = viewModel
+        
         setupConstraints()
     }
     private func setupConstraints() {
-        photoImageView.snp.makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.left.equalTo(self.view).offset(5)
             make.right.equalTo(self.view).offset(-5)
             make.height.equalTo(self.view.frame.width)
         }
         detailView.snp.makeConstraints { make in
-            make.top.equalTo(photoImageView.snp.bottom)
+            make.top.equalTo(imageView.snp.bottom)
             make.left.equalTo(view).offset(5)
             make.right.equalTo(view).offset(-5)
             make.bottom.equalTo(self.view)

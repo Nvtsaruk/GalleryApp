@@ -18,5 +18,8 @@ final class ImageDetailsScreenViewModel {
                 self.photos.append(contentsOf: photos)
             }.store(in: &cancellable)
     }
+    func addToFavourites() {
+        print("Working")
+    }
 
 }

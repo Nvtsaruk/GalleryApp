@@ -119,12 +119,13 @@ extension ImageGalleryScreenView {
         dataSource = .init(collectionView: photoView) { collectionView, indexPath, item in
             guard let section = Section(rawValue: indexPath.section) else { return UICollectionViewCell() }
             switch section {
-                case .main:
-                    let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: PhotoCell.identifier,
-                        for: indexPath) as? PhotoCell
-                    cell?.configure(index: String(indexPath.row), item: item)
-                    return cell
+            case .main:
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: PhotoCell.identifier,
+                    for: indexPath) as? PhotoCell
+//                cell?.configure(index: String(indexPath.row), item: item)
+                cell?.configure(index: String(self.viewModel?.photos[indexPath.row].id ?? ""), item: item)
+                return cell
             }
         }
         
