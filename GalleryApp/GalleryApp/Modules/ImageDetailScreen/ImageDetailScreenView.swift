@@ -16,67 +16,73 @@ class ImageDetailScreenView: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupGestures()
+        observe()
     }
     
     private func setupGestures() {
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
-            swipeRight.direction = .right
-            self.view.addGestureRecognizer(swipeRight)
-
-            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
-            swipeDown.direction = .left
-            self.view.addGestureRecognizer(swipeDown)
+        swipeRight.direction = .right
+        self.view.addGestureRecognizer(swipeRight)
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
+        swipeDown.direction = .left
+        self.view.addGestureRecognizer(swipeDown)
     }
+    
     @objc func respondToSwipeGesture(gesture: UIGestureRecognizer) {
-
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             switch swipeGesture.direction {
             case .right:
-                    viewModel?.id! -= 1
-                    UIView.transition(with: self.photoImageView,
-                                              duration: 1.0,
-                                      options: .transitionFlipFromLeft,
-                                              animations: {
-                        let imageUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""
-                        self.photoImageView.sd_setImage(with: URL(string: imageUrl))
-                            }, completion: nil)
-                    UIView.transition(with: self.detailView,
-                                              duration: 1.0,
-                                      options: .transitionCrossDissolve,
-                                              animations: {
-                        let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
-                        self.detailView.descriptionLabel.text = description ?? "No description"
-                    }, completion: nil)
+                if viewModel?.id ?? 0 > 0 {
+                    viewModel?.id -= 1
+                    updateUI()
+                } else {
+                    viewModel?.id = (viewModel?.photos.count ?? 0) - 1
+                    updateUI()
+                }
             case .left:
-                    viewModel?.id! += 1
-                    UIView.transition(with: self.photoImageView,
-                                              duration: 1.0,
-                                      options: .transitionFlipFromRight,
-                                              animations: {
-                        let imageUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""
-                        self.photoImageView.sd_setImage(with: URL(string: imageUrl))
-                            }, completion: nil)
-                    UIView.transition(with: self.detailView,
-                                              duration: 1.0,
-                                      options: .transitionCrossDissolve,
-                                              animations: {
-                        let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
-                        self.detailView.descriptionLabel.text = description ?? "No description"
-                            }, completion: nil)
+                if viewModel?.id ?? 0 < (viewModel?.photos.count ?? 0) - 1 {
+                    viewModel?.id += 1
+                    updateUI()
+                } else {
+                    viewModel?.page += 1
+                    viewModel?.getData()
+                    viewModel?.id += 1
+                }
             default:
                 break
             }
         }
     }
     
+    private func observe() {
+        viewModel?.$photos
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.updateUI()
+            }.store(in: &cancellable)
+    }
+    
+    private func updateUI() {
+        UIView.transition(with: self.photoImageView,
+                          duration: 1.0,
+                          options: .transitionCrossDissolve,
+                          animations: {
+            let imageUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""
+            self.photoImageView.sd_setImage(with: URL(string: imageUrl))
+        }, completion: nil)
+        UIView.transition(with: self.detailView,
+                          duration: 1.0,
+                          options: .transitionCrossDissolve,
+                          animations: {
+            let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
+            self.detailView.descriptionLabel.text = description ?? "No description"
+        }, completion: nil)
+    }
     private func setupUI() {
-        print("URL",SDImageCache.shared.imageFromCache(forKey: viewModel?.photos[viewModel?.id ?? 0].urls.small ?? ""))
         view.backgroundColor = AppColors.background.color
-        
         view.addSubview(photoImageView)
         photoImageView.sd_setImage(with: URL(string: viewModel?.photos[viewModel?.id ?? 0].urls.regular ?? ""),
                                    placeholderImage: SDImageCache.shared.imageFromCache(forKey: viewModel?.photos[viewModel?.id ?? 0].urls.small ?? ""))
-//        photoImageView.sd_setImage(with: URL(string: viewModel?.photos[viewModel?.id ?? 0].urls.regular ?? ""))
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
         photoImageView.layer.cornerRadius = 16

@@ -56,13 +56,11 @@ class ImageGalleryScreenView: UIViewController {
 
 extension ImageGalleryScreenView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        guard let data = SDImageCache.shared.imageFromCache(forKey: viewModel?.photos[indexPath.row].urls.small ?? "")?.jpegData(compressionQuality: 0.8) else { return }
-        viewModel?.pushDetails(id: indexPath.row, currentImage: data)
+        viewModel?.pushDetails(id: indexPath.row)
     }
 }
 
-//MARK: - Setup CollectionView
+// MARK: - Setup CollectionView
 
 extension ImageGalleryScreenView {
     enum Section: Int, CaseIterable {
