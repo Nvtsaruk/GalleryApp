@@ -3,6 +3,7 @@ import Hero
 protocol CoordinatorProtocol {
     func start()
     func pushDetailsView(id: Int, photos: [PhotoArray], page: Int)
+    func backToMainView(id: Int, photos: [PhotoArray], page: Int)
 }
 final class Coordinator: CoordinatorProtocol {
 
@@ -30,4 +31,17 @@ final class Coordinator: CoordinatorProtocol {
         navigationController.heroNavigationAnimationType = .fade
         navigationController.pushViewController(detailsViewController, animated: true)
     }
+    func backToMainView(id: Int, photos: [PhotoArray], page: Int) {
+        guard let imageGalleryViewController = navigationController.viewControllers.first as? ImageGalleryScreenView else { return }
+        let viewModel = ImageGalleryScreenViewModel()
+        viewModel.coordinator = self
+        viewModel.id = id
+        viewModel.photos = photos
+        viewModel.page = page
+        imageGalleryViewController.viewModel = viewModel
+        navigationController.popToViewController(imageGalleryViewController, animated: true)
+    }
+//    func backToMainView(id: Int, photos: [PhotoArray], page: Int) {
+//        print(navigationController.viewControllers.first)
+//    }
 }

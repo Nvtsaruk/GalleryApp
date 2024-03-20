@@ -10,7 +10,6 @@ enum LabelType {
 class ImageDetailScreenView: UIViewController {
     var viewModel: ImageDetailsScreenViewModel?
     private var cancellable: Set<AnyCancellable> = []
-    lazy var photoImageView = UIImageView()
     lazy var imageView = ImageView()
     lazy var detailView = DetailView()
     override func viewDidLoad() {
@@ -64,13 +63,15 @@ class ImageDetailScreenView: UIViewController {
     }
     
     private func updateUI() {
-        UIView.transition(with: self.photoImageView,
+        
+        UIView.transition(with: self.imageView,
                           duration: 1.0,
                           options: .transitionCrossDissolve,
                           animations: {
             let imageUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""
-            self.photoImageView.sd_setImage(with: URL(string: imageUrl))
-            self.photoImageView.heroID = String(self.viewModel?.photos[self.viewModel?.id ?? 0].id ?? "")
+            print(imageUrl)
+            self.imageView.photoImageView.sd_setImage(with: URL(string: imageUrl))
+            self.imageView.photoImageView.heroID = String(self.viewModel?.photos[self.viewModel?.id ?? 0].id ?? "")
         }, completion: nil)
         UIView.transition(with: self.detailView,
                           duration: 1.0,
@@ -81,17 +82,17 @@ class ImageDetailScreenView: UIViewController {
         }, completion: nil)
     }
     
+    @objc func backToMainView() {
+        viewModel?.backToMainView()
+    }
+    
     private func setupUI() {
+        let backToRootVCButton = UIBarButtonItem.init(title: "Back", style: UIBarButtonItem.Style.plain, target: self, action: #selector(backToMainView))
+        self.navigationItem.setLeftBarButton(backToRootVCButton, animated: true)
         view.backgroundColor = AppColors.background.color
         view.addSubview(imageView)
         guard let regularURL = viewModel?.photos[viewModel?.id ?? 0].urls.regular,
               let smallURL = viewModel?.photos[viewModel?.id ?? 0].urls.small else { return }
-        //        photoImageView.sd_setImage(with: URL(string: regularURL),
-        //                                   placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL))
-        //        photoImageView.contentMode = .scaleAspectFill
-        //        photoImageView.clipsToBounds = true
-        //        photoImageView.layer.cornerRadius = 16
-        //        photoImageView.heroID = String(viewModel?.photos[viewModel?.id ?? 0].id ?? "")
         imageView.configure(imageUrl: URL(string: regularURL),
                             placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL),
                             heroId: String(viewModel?.photos[viewModel?.id ?? 0].id ?? ""))

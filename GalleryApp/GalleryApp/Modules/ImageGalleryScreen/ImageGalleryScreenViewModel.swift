@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+
 protocol ImageGalleryScreenViewModelProtocol {
     func getData()
     var photosPublisher: Published<[PhotoList]>.Publisher { get }
@@ -10,7 +11,12 @@ final class ImageGalleryScreenViewModel {
     let apiService = ApiService()
     private var cancellable: Set<AnyCancellable> = []
     @Published var photos: [PhotoArray] = []
-    var page = 1 
+    @Published var id = 0 {
+        didSet {
+            print("New id", id)
+        }
+    }
+    var page = 1
     func getData() {
         apiService.getPhotos(page: page)
             .sink { error in

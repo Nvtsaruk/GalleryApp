@@ -21,5 +21,8 @@ final class ImageDetailsScreenViewModel {
     func addToFavourites() {
         print("Working")
     }
+    func backToMainView() {
+        coordinator?.backToMainView(id: id, photos: photos, page: page)
+    }
 
 }
