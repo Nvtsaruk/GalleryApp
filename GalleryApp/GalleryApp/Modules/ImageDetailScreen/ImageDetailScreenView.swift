@@ -30,6 +30,8 @@ class ImageDetailScreenView: UIViewController {
     
     @objc func respondToSwipeGesture(gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            print("Id",viewModel?.id)
+            print("Id",viewModel?.photos.count)
             switch swipeGesture.direction {
             case .right:
                 if viewModel?.id ?? 0 > 0 {

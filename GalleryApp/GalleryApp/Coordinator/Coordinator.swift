@@ -41,7 +41,4 @@ final class Coordinator: CoordinatorProtocol {
         imageGalleryViewController.viewModel = viewModel
         navigationController.popToViewController(imageGalleryViewController, animated: true)
     }
-//    func backToMainView(id: Int, photos: [PhotoArray], page: Int) {
-//        print(navigationController.viewControllers.first)
-//    }
 }

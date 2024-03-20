@@ -48,6 +48,9 @@ class ImageGalleryScreenView: UIViewController {
     
     func scrollToItem(id: Int) {
         if photoView.numberOfSections != 0 {
+            if photoView.numberOfItems(inSection: 0) < viewModel?.photos.count ?? 0 {
+                self.reloadSnapshot()
+            }
             photoView.scrollToItem(at: IndexPath(row: id, section: 0),
                                    at: [.centeredVertically, .centeredHorizontally],
                                    animated: true)
