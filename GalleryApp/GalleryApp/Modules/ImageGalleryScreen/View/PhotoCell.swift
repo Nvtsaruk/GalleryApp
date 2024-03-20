@@ -1,4 +1,5 @@
 import UIKit
+
 final class PhotoCell: UICollectionViewCell {
     static let identifier = "PhotoCell"
     private let photoImageView = UIImageView()

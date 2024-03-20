@@ -27,6 +27,11 @@ enum AppColors {
     }
 }
 
-enum UIConstants {
-    
+enum AnimationConstants: Double {
+    case animationDuration = 0.25
+}
+
+enum UIConstants: CGFloat {
+    case cornerRadius = 16
+    case thumbCornerRadius = 8
 }

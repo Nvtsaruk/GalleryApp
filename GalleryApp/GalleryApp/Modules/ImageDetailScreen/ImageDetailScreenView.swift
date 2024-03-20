@@ -63,9 +63,8 @@ class ImageDetailScreenView: UIViewController {
     }
     
     private func updateUI() {
-        
         UIView.transition(with: self.imageView,
-                          duration: 1.0,
+                          duration: AnimationConstants.animationDuration.rawValue,
                           options: .transitionCrossDissolve,
                           animations: {
             let imageUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""
@@ -74,7 +73,7 @@ class ImageDetailScreenView: UIViewController {
             self.imageView.photoImageView.heroID = String(self.viewModel?.photos[self.viewModel?.id ?? 0].id ?? "")
         }, completion: nil)
         UIView.transition(with: self.detailView,
-                          duration: 1.0,
+                          duration: AnimationConstants.animationDuration.rawValue,
                           options: .transitionCrossDissolve,
                           animations: {
             let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
@@ -96,11 +95,12 @@ class ImageDetailScreenView: UIViewController {
         imageView.configure(imageUrl: URL(string: regularURL),
                             placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL),
                             heroId: String(viewModel?.photos[viewModel?.id ?? 0].id ?? ""))
-        
+        imageView.layer.cornerRadius = UIConstants.cornerRadius.rawValue
+        imageView.clipsToBounds = true
         view.addSubview(detailView)
         detailView.heroModifiers = [.fade, .translate(x: 0, y: 400)]
         detailView.backgroundColor = AppColors.descriptionBackground.color
-        detailView.layer.cornerRadius = 16
+        detailView.layer.cornerRadius = UIConstants.cornerRadius.rawValue
         
         guard let width = viewModel?.photos[viewModel?.id ?? 0].width,
               let height = viewModel?.photos[viewModel?.id ?? 0].height else { return }

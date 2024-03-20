@@ -33,11 +33,11 @@ final class Coordinator: CoordinatorProtocol {
     }
     func backToMainView(id: Int, photos: [PhotoArray], page: Int) {
         guard let imageGalleryViewController = navigationController.viewControllers.first as? ImageGalleryScreenView else { return }
-        let viewModel = ImageGalleryScreenViewModel()
-        viewModel.coordinator = self
-        viewModel.id = id
-        viewModel.photos = photos
-        viewModel.page = page
+        let viewModel = imageGalleryViewController.viewModel
+        viewModel?.coordinator = self
+        viewModel?.id = id
+        viewModel?.photos = photos
+        viewModel?.page = page
         imageGalleryViewController.viewModel = viewModel
         navigationController.popToViewController(imageGalleryViewController, animated: true)
     }

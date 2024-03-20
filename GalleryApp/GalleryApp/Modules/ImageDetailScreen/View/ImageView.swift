@@ -19,7 +19,6 @@ final class ImageView: UIView {
         photoImageView.sd_setImage(with: imageUrl, placeholderImage: placeholderImage)
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
-        photoImageView.layer.cornerRadius = 16
         photoImageView.heroID = heroId
     }
     

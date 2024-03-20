@@ -36,9 +36,22 @@ class ImageGalleryScreenView: UIViewController {
         viewModel?.$photos
             .filter { !$0.isEmpty }
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] photo in
+            .sink { [weak self] _ in
                 self?.reloadSnapshot()
             }.store(in: &cancellable)
+        viewModel?.$id
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] id in
+                self?.scrollToItem(id: id)
+            }.store(in: &cancellable)
+    }
+    
+    func scrollToItem(id: Int) {
+        if photoView.numberOfSections != 0 {
+            photoView.scrollToItem(at: IndexPath(row: id, section: 0),
+                                   at: [.centeredVertically, .centeredHorizontally],
+                                   animated: true)
+        }
     }
     
     private func reloadSnapshot() {
@@ -123,7 +136,6 @@ extension ImageGalleryScreenView {
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: PhotoCell.identifier,
                     for: indexPath) as? PhotoCell
-//                cell?.configure(index: String(indexPath.row), item: item)
                 cell?.configure(index: String(self.viewModel?.photos[indexPath.row].id ?? ""), item: item)
                 return cell
             }
@@ -133,7 +145,6 @@ extension ImageGalleryScreenView {
             guard let footerView = self.photoView.dequeueReusableSupplementaryView(
                 ofKind: UICollectionView.elementKindSectionFooter,
                 withReuseIdentifier: FooterView.identifier, for: indexPath) as? FooterView else { fatalError() }
-            footerView.toggleLoading(isEnabled: isPaginating)
             return footerView
         }
     }
@@ -143,6 +154,8 @@ extension ImageGalleryScreenView {
             isPaginating = true
             viewModel?.page += 1
             viewModel?.getData()
+            print("ViewModel version",viewModel)
         }
     }
+    
 }
