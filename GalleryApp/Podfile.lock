@@ -1,5 +1,10 @@
 PODS:
   - Hero (1.6.3)
+  - Realm (10.48.1):
+    - Realm/Headers (= 10.48.1)
+  - Realm/Headers (10.48.1)
+  - RealmSwift (10.48.1):
+    - Realm (= 10.48.1)
   - SDWebImage (5.18.10):
     - SDWebImage/Core (= 5.18.10)
   - SDWebImage/Core (5.18.10)
@@ -8,6 +13,7 @@ PODS:
 
 DEPENDENCIES:
   - Hero
+  - RealmSwift (~> 10)
   - SDWebImage (~> 5.0)
   - SnapKit (~> 5.7.0)
   - SwiftLint
@@ -15,16 +21,20 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Hero
+    - Realm
+    - RealmSwift
     - SDWebImage
     - SnapKit
     - SwiftLint
 
 SPEC CHECKSUMS:
   Hero: 419d43384355b3168512bd8ac6a33aadd3dc575b
+  Realm: 0a97896f14bac20f01c149f5d9c5b04a3f69240d
+  RealmSwift: c37a89ddbeab328d9d77ae7b7041441e2e51ae1e
   SDWebImage: fc8f2d48bbfd72ef39d70e981bd24a3f3be53fec
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
   SwiftLint: c1de071d9d08c8aba837545f6254315bc900e211
 
-PODFILE CHECKSUM: 33c542be30bb6d7e81dbfa0adb43dc3cb5492420
+PODFILE CHECKSUM: 86e8831a8a9c33b16a2b1ffe5ddb5ce19bd57678
 
 COCOAPODS: 1.15.2
