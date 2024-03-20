@@ -13,7 +13,6 @@ enum NetworkConstants {
 
 final class ApiService {
     func getPhotos(page: Int) -> AnyPublisher<[PhotoArray], Error> {
-        print("Page in serice", page)
         let url = URL(string: "https://api.unsplash.com/photos?page=\(page)&per_page=30")!
             var request = URLRequest(url: url)
             request.httpMethod = "GET"

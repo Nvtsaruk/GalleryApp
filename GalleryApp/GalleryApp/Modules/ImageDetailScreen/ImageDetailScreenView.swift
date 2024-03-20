@@ -30,8 +30,6 @@ class ImageDetailScreenView: UIViewController {
     
     @objc func respondToSwipeGesture(gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            print("Id",viewModel?.id)
-            print("Id",viewModel?.photos.count)
             switch swipeGesture.direction {
             case .right:
                 if viewModel?.id ?? 0 > 0 {
@@ -70,7 +68,6 @@ class ImageDetailScreenView: UIViewController {
                           options: .transitionCrossDissolve,
                           animations: {
             let imageUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""
-            print(imageUrl)
             self.imageView.photoImageView.sd_setImage(with: URL(string: imageUrl))
             self.imageView.photoImageView.heroID = String(self.viewModel?.photos[self.viewModel?.id ?? 0].id ?? "")
         }, completion: nil)

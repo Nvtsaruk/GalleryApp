@@ -153,11 +153,9 @@ extension ImageGalleryScreenView {
     }
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item == (viewModel?.photos.count ?? 0) - 1 {
-            print("last reached. paginate now")
             isPaginating = true
             viewModel?.page += 1
             viewModel?.getData()
-            print("ViewModel version",viewModel)
         }
     }
     
