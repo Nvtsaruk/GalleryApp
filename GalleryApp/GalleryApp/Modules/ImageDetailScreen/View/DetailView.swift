@@ -4,37 +4,14 @@ import UIKit
 final class DetailView: UIView {
     
     var isFavourite: Bool = false
+    let stackView = UIStackView()
     
-    lazy var descriptionTitle: UILabel = {
-            let label = UILabel()
-            addSubview(label)
-            return label
-        }()
-    lazy var descriptionLabel: UILabel = {
-            let label = UILabel()
-            addSubview(label)
-            return label
-        }()
-    lazy var sizeTitle: UILabel = {
-            let label = UILabel()
-            addSubview(label)
-            return label
-        }()
-    lazy var sizeLabel: UILabel = {
-            let label = UILabel()
-            addSubview(label)
-            return label
-        }()
-    lazy var userTitle: UILabel = {
-            let label = UILabel()
-            addSubview(label)
-            return label
-        }()
-    lazy var userLabel: UILabel = {
-            let label = UILabel()
-            addSubview(label)
-            return label
-        }()
+    let descriptionTitle = UILabel()
+    let descriptionLabel = UILabel()
+    let sizeTitle = UILabel()
+    let sizeLabel = UILabel()
+    let userTitle = UILabel()
+    let userLabel = UILabel()
     let favButton = UIButton()
     
     var viewModel: ImageDetailsScreenViewModel?
@@ -42,11 +19,24 @@ final class DetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(favButton)
+        configureStack()
+        addSubview(stackView)
         layout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureStack() {
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.addArrangedSubview(descriptionTitle)
+        stackView.addArrangedSubview(descriptionLabel)
+        stackView.addArrangedSubview(sizeTitle)
+        stackView.addArrangedSubview(sizeLabel)
+        stackView.addArrangedSubview(userTitle)
+        stackView.addArrangedSubview(userLabel)
     }
     func configure(descLabelText: String, width: Int, height: Int, user: String, isFav: Bool) {
         descriptionTitle.text = "Description"
@@ -70,7 +60,6 @@ final class DetailView: UIView {
         userLabel.textColor = AppColors.mainTextColor.color
         
         isFavourite = isFav
-        print("In detailView",isFavourite)
         setupButton()
         favButton.addTarget(self, action: #selector(self.favButtonAction), for: .touchUpInside)
     }
@@ -94,34 +83,10 @@ final class DetailView: UIView {
             make.left.top.equalToSuperview().offset(10)
             make.height.width.equalTo(48)
         }
-        descriptionTitle.snp.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(10)
-            make.top.equalTo(favButton.snp.bottom).offset(10)
-        }
-        descriptionLabel.snp.makeConstraints { make in
-            make.left.equalTo(descriptionTitle)
-            make.top.equalTo(descriptionTitle.snp.bottom).offset(10)
-            make.right.equalToSuperview().offset(-5)
-        }
-        sizeTitle.snp.makeConstraints { make in
-            make.left.equalTo(descriptionTitle)
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(10)
-            make.right.equalToSuperview().offset(-10)
-        }
-        sizeLabel.snp.makeConstraints { make in
-            make.left.equalTo(descriptionTitle)
-            make.top.equalTo(sizeTitle.snp.bottom).offset(10)
-            make.right.equalToSuperview().offset(-10)
-        }
-        userTitle.snp.makeConstraints { make in
-            make.left.equalTo(descriptionTitle)
-            make.top.equalTo(sizeLabel.snp.bottom).offset(10)
-            make.right.equalToSuperview().offset(-10)
-        }
-        userLabel.snp.makeConstraints { make in
-            make.left.equalTo(descriptionTitle)
-            make.top.equalTo(userTitle.snp.bottom).offset(10)
-            make.right.equalToSuperview().offset(-10)
+            make.top.equalTo(favButton.snp.bottom)
+            make.height.equalTo(140)
         }
     }
 }

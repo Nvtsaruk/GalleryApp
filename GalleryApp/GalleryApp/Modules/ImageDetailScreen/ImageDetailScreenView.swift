@@ -97,13 +97,12 @@ class ImageDetailScreenView: UIViewController {
         imageView.configure(imageUrl: URL(string: regularUrl),
                             placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL),
                             heroId: String(viewModel?.photos[viewModel?.id ?? 0].id ?? ""))
-        imageView.layer.cornerRadius = UIConstants.cornerRadius.rawValue
         imageView.clipsToBounds = true
         view.addSubview(detailView)
         detailView.heroModifiers = [.fade, .translate(x: 0, y: 400)]
         detailView.backgroundColor = AppColors.descriptionBackground.color
         detailView.layer.cornerRadius = UIConstants.cornerRadius.rawValue
-        
+
         guard let width = viewModel?.photos[viewModel?.id ?? 0].width,
               let height = viewModel?.photos[viewModel?.id ?? 0].height else { return }
         detailView.configure(descLabelText: viewModel?.photos[viewModel?.id ?? 0].description ?? "No description",
