@@ -11,9 +11,8 @@ final class DatabasePhotos: Object {
     @Persisted var user: DatabaseUser?
     @Persisted var urls: DatabaseUrls?
     @Persisted var localUrlRegular: String?
-    @Persisted var localUrlSmall: String?
     
-    convenience init(liked_by_user: Bool, _ model: PhotoArray, user: DatabaseUser, urls: DatabaseUrls, localUrlRegular: String?, localUrlSmall: String?) {
+    convenience init(liked_by_user: Bool, _ model: PhotoArray, user: DatabaseUser, urls: DatabaseUrls, localUrlRegular: String?) {
         self.init()
         self.uuid = model.uuid
         self.id = model.id
@@ -23,7 +22,6 @@ final class DatabasePhotos: Object {
         self.user = user
         self.urls = urls
         self.localUrlRegular = localUrlRegular
-        self.localUrlSmall = localUrlSmall
     }
 }
 

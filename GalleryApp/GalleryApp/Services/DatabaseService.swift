@@ -6,13 +6,12 @@ final class DatabaseService {
     
     let realm = try? Realm()
     
-    func addToDatabase(photos: PhotoArray, imageUrlSmall: String, imageUrlRegular: String) {
+    func addToDatabase(photos: PhotoArray, imageUrlRegular: String) {
         var dbPhotos = DatabasePhotos()
         let modelToDatabase = ModelToDatabase(photos: photos)
         dbPhotos = modelToDatabase.modelToDatabase()
         dbPhotos.likedByUser = true
         dbPhotos.localUrlRegular = imageUrlRegular
-        dbPhotos.localUrlSmall = imageUrlSmall
         try? realm?.write {
             realm?.add(dbPhotos)
         }

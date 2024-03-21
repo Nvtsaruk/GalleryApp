@@ -8,7 +8,7 @@ final class ModelToDatabase {
     func modelToDatabase() -> DatabasePhotos {
         let dbUser = DatabaseUser(photos.user)
         let dbUrls = DatabaseUrls(photos.urls)
-        let dbPhotos = DatabasePhotos(liked_by_user: false, photos, user: dbUser, urls: dbUrls, localUrlRegular: nil, localUrlSmall: nil)
+        let dbPhotos = DatabasePhotos(liked_by_user: false, photos, user: dbUser, urls: dbUrls, localUrlRegular: nil)
         return dbPhotos
     }
 }

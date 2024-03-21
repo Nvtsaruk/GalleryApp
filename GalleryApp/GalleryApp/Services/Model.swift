@@ -7,7 +7,6 @@ struct PhotoArray: Decodable {
     let width: Int
     let height: Int
     let description: String?
-    var imageUrlSmall: String?
     var imageUrlRegular: String?
     let user: UserModel
     let urls: UrlsModel

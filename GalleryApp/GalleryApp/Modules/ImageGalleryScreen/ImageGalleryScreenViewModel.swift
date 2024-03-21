@@ -30,6 +30,7 @@ final class ImageGalleryScreenViewModel {
     func getDataFromDatabase() {
         print(DatabaseService.shared.getAllPhotos().count)
         databasePhotos = DatabaseService.shared.getAllPhotos()
+        print(databasePhotos)
         addFavs()
     }
     private func addFavs() {

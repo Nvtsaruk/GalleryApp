@@ -7,7 +7,6 @@ final class ImageDetailsScreenViewModel {
     @Published var photos: [PhotoArray] = []
     private var cancellable: Set<AnyCancellable> = []
     var id = 0
-    var currentImage: Data?
     
     var page = 1
     func getData() {
@@ -18,14 +17,21 @@ final class ImageDetailsScreenViewModel {
                 self.photos.append(contentsOf: photos)
             }.store(in: &cancellable)
     }
-    func toggleFavourites() {
+    func toggleFavourites(regularImage: Data?) {
         if photos[id].likedByUser ?? false {
+            print("Unlike")
             DatabaseService.shared.deleteFromDatabase(id: photos[id].id)
             photos[id].likedByUser?.toggle()
         } else {
-//            DatabaseService.shared.addToDatabase(photos: photos[id])
-            photos[id].likedByUser?.toggle()
+            guard let regularImage = regularImage else { return }
+            saveToLocalStorage(image: regularImage)
+            DatabaseService.shared.addToDatabase(photos: photos[id], imageUrlRegular: photos[id].id)
+            photos[id].likedByUser = true
         }
+    }
+    
+    private func saveToLocalStorage(image: Data) {
+        LocalStorageService.shared.store(image: image, forKey: photos[id].id)
     }
 
     func backToMainView() {
