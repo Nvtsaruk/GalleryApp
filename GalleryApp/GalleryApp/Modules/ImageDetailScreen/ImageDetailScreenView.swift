@@ -85,13 +85,16 @@ class ImageDetailScreenView: UIViewController {
     }
     
     private func setupUI() {
-        let backToRootVCButton = UIBarButtonItem.init(title: "Back", style: UIBarButtonItem.Style.plain, target: self, action: #selector(backToMainView))
+        let backToRootVCButton = UIBarButtonItem.init(title: "Back",
+                                                      style: UIBarButtonItem.Style.plain,
+                                                      target: self,
+                                                      action: #selector(backToMainView))
         self.navigationItem.setLeftBarButton(backToRootVCButton, animated: true)
         view.backgroundColor = AppColors.background.color
         view.addSubview(imageView)
-        guard let regularURL = viewModel?.photos[viewModel?.id ?? 0].urls.regular,
+        guard let regularUrl = viewModel?.photos[viewModel?.id ?? 0].urls.regular,
               let smallURL = viewModel?.photos[viewModel?.id ?? 0].urls.small else { return }
-        imageView.configure(imageUrl: URL(string: regularURL),
+        imageView.configure(imageUrl: URL(string: regularUrl),
                             placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL),
                             heroId: String(viewModel?.photos[viewModel?.id ?? 0].id ?? ""))
         imageView.layer.cornerRadius = UIConstants.cornerRadius.rawValue
@@ -103,12 +106,12 @@ class ImageDetailScreenView: UIViewController {
         
         guard let width = viewModel?.photos[viewModel?.id ?? 0].width,
               let height = viewModel?.photos[viewModel?.id ?? 0].height else { return }
-        
         detailView.configure(descLabelText: viewModel?.photos[viewModel?.id ?? 0].description ?? "No description",
                              width: width,
-                             height: height)
+                             height: height,
+                             user: viewModel?.photos[viewModel?.id ?? 0].user.username ?? "No name",
+                             isFav: ((viewModel?.photos[viewModel?.id ?? 0].likedByUser) != nil))
         detailView.viewModel = viewModel
-        
         setupConstraints()
     }
     private func setupConstraints() {

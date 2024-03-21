@@ -20,6 +20,7 @@ final class ImageView: UIView {
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
         photoImageView.heroID = heroId
+        photoImageView.layer.cornerRadius = UIConstants.cornerRadius.rawValue
     }
     
     private func layout() {

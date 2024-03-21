@@ -3,7 +3,7 @@ import UIKit
 
 final class DetailView: UIView {
     
-    var isFav: Bool = false
+    var isFavourite: Bool = false
     
     lazy var descriptionTitle: UILabel = {
             let label = UILabel()
@@ -25,6 +25,16 @@ final class DetailView: UIView {
             addSubview(label)
             return label
         }()
+    lazy var userTitle: UILabel = {
+            let label = UILabel()
+            addSubview(label)
+            return label
+        }()
+    lazy var userLabel: UILabel = {
+            let label = UILabel()
+            addSubview(label)
+            return label
+        }()
     let favButton = UIButton()
     
     var viewModel: ImageDetailsScreenViewModel?
@@ -38,7 +48,7 @@ final class DetailView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func configure(descLabelText: String, width: Int, height: Int) {
+    func configure(descLabelText: String, width: Int, height: Int, user: String, isFav: Bool) {
         descriptionTitle.text = "Description"
         descriptionTitle.textColor = AppColors.descriptionTitleTextColor.color
         
@@ -53,6 +63,14 @@ final class DetailView: UIView {
         sizeLabel.text = "\(width)x\(height)px"
         sizeLabel.textColor = AppColors.mainTextColor.color
         
+        userTitle.text = "User"
+        userTitle.textColor = AppColors.descriptionTitleTextColor.color
+        
+        userLabel.text = user
+        userLabel.textColor = AppColors.mainTextColor.color
+        
+        isFavourite = isFav
+        print("In detailView",isFavourite)
         setupButton()
         favButton.addTarget(self, action: #selector(self.favButtonAction), for: .touchUpInside)
     }
@@ -61,14 +79,14 @@ final class DetailView: UIView {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold, scale: .large)
         let heartFill = UIImage(systemName: "heart.fill", withConfiguration: largeConfig)
         let heart = UIImage(systemName: "heart", withConfiguration: largeConfig)
-        favButton.setImage(isFav ? heartFill : heart, for: .normal)
-        favButton.tintColor = isFav ? .red : .lightGray
+        favButton.setImage(isFavourite ? heartFill : heart, for: .normal)
+        favButton.tintColor = isFavourite ? .red : .lightGray
     }
     
     @objc func favButtonAction() {
-        isFav.toggle()
+        isFavourite.toggle()
         setupButton()
-        viewModel?.addToFavourites()
+        viewModel?.toggleFavourites()
     }
     
     private func layout() {
@@ -95,7 +113,15 @@ final class DetailView: UIView {
             make.top.equalTo(sizeTitle.snp.bottom).offset(10)
             make.right.equalToSuperview().offset(-10)
         }
-        
+        userTitle.snp.makeConstraints { make in
+            make.left.equalTo(descriptionTitle)
+            make.top.equalTo(sizeLabel.snp.bottom).offset(10)
+            make.right.equalToSuperview().offset(-10)
+        }
+        userLabel.snp.makeConstraints { make in
+            make.left.equalTo(descriptionTitle)
+            make.top.equalTo(userTitle.snp.bottom).offset(10)
+            make.right.equalToSuperview().offset(-10)
+        }
     }
-    
 }
