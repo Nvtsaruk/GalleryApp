@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1DCACEE1C65CAA5D7CDBAD96 /* Pods_GalleryApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3931D5EC538420FE714347 /* Pods_GalleryApp.framework */; };
-		CC2EFFA02BAC771600F27E1D /* Temp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2EFF9F2BAC771600F27E1D /* Temp.swift */; };
 		CC40EF472BAB195900993BF8 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC40EF462BAB195900993BF8 /* DatabaseService.swift */; };
 		CC40EF492BAB19B700993BF8 /* DatabaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC40EF482BAB19B700993BF8 /* DatabaseModel.swift */; };
 		CC40EF4B2BAB203200993BF8 /* ModelMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC40EF4A2BAB203200993BF8 /* ModelMapping.swift */; };
@@ -36,7 +35,6 @@
 		53B43B5D4AB8B6679287B1D3 /* Pods-GalleryApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GalleryApp.release.xcconfig"; path = "Target Support Files/Pods-GalleryApp/Pods-GalleryApp.release.xcconfig"; sourceTree = "<group>"; };
 		5F3931D5EC538420FE714347 /* Pods_GalleryApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GalleryApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC12B9E71AB24CB3F84709ED /* Pods-GalleryApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GalleryApp.debug.xcconfig"; path = "Target Support Files/Pods-GalleryApp/Pods-GalleryApp.debug.xcconfig"; sourceTree = "<group>"; };
-		CC2EFF9F2BAC771600F27E1D /* Temp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temp.swift; sourceTree = "<group>"; };
 		CC40EF462BAB195900993BF8 /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		CC40EF482BAB19B700993BF8 /* DatabaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseModel.swift; sourceTree = "<group>"; };
 		CC40EF4A2BAB203200993BF8 /* ModelMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelMapping.swift; sourceTree = "<group>"; };
@@ -158,7 +156,6 @@
 			children = (
 				CC9C679F2BA743E6002B6EE0 /* View */,
 				CC9C678C2BA32107002B6EE0 /* ImageDetailScreenView.swift */,
-				CC2EFF9F2BAC771600F27E1D /* Temp.swift */,
 				CC9C67902BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift */,
 			);
 			path = ImageDetailScreen;
@@ -350,7 +347,6 @@
 				CC9C678B2BA31208002B6EE0 /* ImageGalleryScreenView.swift in Sources */,
 				CC9C67A12BA743F1002B6EE0 /* DetailView.swift in Sources */,
 				CC9C67912BA32420002B6EE0 /* ImageDetailsScreenViewModel.swift in Sources */,
-				CC2EFFA02BAC771600F27E1D /* Temp.swift in Sources */,
 				CC40EF472BAB195900993BF8 /* DatabaseService.swift in Sources */,
 				CC4AACA32BA1D67B004746CC /* ViewController.swift in Sources */,
 				CC9C67962BA3363B002B6EE0 /* Model.swift in Sources */,
