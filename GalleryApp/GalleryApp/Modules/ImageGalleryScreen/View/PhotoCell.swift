@@ -21,12 +21,11 @@ final class PhotoCell: UICollectionViewCell {
     private func configUI() {
         addSubview(photoImageView)
         addSubview(favIcon)
+        
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
         photoImageView.layer.cornerRadius = 8
-        photoImageView.snp.makeConstraints { make in
-            make.left.right.top.bottom.equalToSuperview()
-        }
+        
         favIcon.image = UIImage(systemName: "star.fill")
         favIcon.tintColor = AppColors.activeButton.color
         favIcon.clipsToBounds = false
@@ -34,11 +33,16 @@ final class PhotoCell: UICollectionViewCell {
         favIcon.layer.shadowOpacity = 1
         favIcon.layer.shadowOffset = CGSize.zero
         favIcon.layer.shadowRadius = 1
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        photoImageView.snp.makeConstraints { make in
+            make.left.right.top.bottom.equalToSuperview()
+        }
         favIcon.snp.makeConstraints { make in
             make.right.top.equalToSuperview().inset(5)
             make.height.width.equalTo(16)
         }
-        
     }
-
 }

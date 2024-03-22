@@ -6,12 +6,7 @@ final class ImageGalleryScreenViewModel {
     let apiService = ApiService()
     private var cancellable: Set<AnyCancellable> = []
     @Published var photos: [PhotoArray] = []
-    @Published var databasePhotos: [PhotoArray] = [] {
-        didSet {
-            print(databasePhotos.count)
-//            addFavs()
-        }
-    }
+    @Published var databasePhotos: [PhotoArray] = []
     @Published var id = 0
     var page = 1
     func getData() {
