@@ -35,7 +35,6 @@ class ImageGalleryScreenView: UIViewController {
         appearance.titleTextAttributes = [.foregroundColor: AppColors.headerColor.color]
         appearance.largeTitleTextAttributes = [.foregroundColor: AppColors.headerColor.color]
         navigationItem.standardAppearance = appearance
-
     }
     
     private func observe() {

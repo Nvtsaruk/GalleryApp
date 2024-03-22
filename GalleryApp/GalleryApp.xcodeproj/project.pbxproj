@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1DCACEE1C65CAA5D7CDBAD96 /* Pods_GalleryApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F3931D5EC538420FE714347 /* Pods_GalleryApp.framework */; };
+		CC2EFFA22BADC7B500F27E1D /* NetworkConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2EFFA12BADC7B500F27E1D /* NetworkConstants.swift */; };
 		CC40EF472BAB195900993BF8 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC40EF462BAB195900993BF8 /* DatabaseService.swift */; };
 		CC40EF492BAB19B700993BF8 /* DatabaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC40EF482BAB19B700993BF8 /* DatabaseModel.swift */; };
 		CC40EF4B2BAB203200993BF8 /* ModelMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC40EF4A2BAB203200993BF8 /* ModelMapping.swift */; };
@@ -35,6 +36,7 @@
 		53B43B5D4AB8B6679287B1D3 /* Pods-GalleryApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GalleryApp.release.xcconfig"; path = "Target Support Files/Pods-GalleryApp/Pods-GalleryApp.release.xcconfig"; sourceTree = "<group>"; };
 		5F3931D5EC538420FE714347 /* Pods_GalleryApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GalleryApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC12B9E71AB24CB3F84709ED /* Pods-GalleryApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GalleryApp.debug.xcconfig"; path = "Target Support Files/Pods-GalleryApp/Pods-GalleryApp.debug.xcconfig"; sourceTree = "<group>"; };
+		CC2EFFA12BADC7B500F27E1D /* NetworkConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConstants.swift; sourceTree = "<group>"; };
 		CC40EF462BAB195900993BF8 /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		CC40EF482BAB19B700993BF8 /* DatabaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseModel.swift; sourceTree = "<group>"; };
 		CC40EF4A2BAB203200993BF8 /* ModelMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelMapping.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				CC9C67922BA33620002B6EE0 /* APIService.swift */,
+				CC2EFFA12BADC7B500F27E1D /* NetworkConstants.swift */,
 				CC9C67952BA3363B002B6EE0 /* Model.swift */,
 				CC40EF462BAB195900993BF8 /* DatabaseService.swift */,
 				CC40EF4C2BAC65C200993BF8 /* LocalStorageService.swift */,
@@ -352,6 +355,7 @@
 				CC9C67962BA3363B002B6EE0 /* Model.swift in Sources */,
 				CC9C678D2BA32107002B6EE0 /* ImageDetailScreenView.swift in Sources */,
 				CC4AAC9F2BA1D67B004746CC /* AppDelegate.swift in Sources */,
+				CC2EFFA22BADC7B500F27E1D /* NetworkConstants.swift in Sources */,
 				CC9C679E2BA6E33B002B6EE0 /* AppConstants.swift in Sources */,
 				CC9C67932BA33620002B6EE0 /* APIService.swift in Sources */,
 				CC9C679B2BA5AD9F002B6EE0 /* FooterView.swift in Sources */,

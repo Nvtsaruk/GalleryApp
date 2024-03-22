@@ -9,11 +9,13 @@ final class ImageGalleryScreenViewModel {
     @Published var databasePhotos: [PhotoArray] = []
     @Published var id = 0
     var page = 1
+    
     func getData() {
         getDataFromApi()
         getDataFromDatabase()
     }
-    func getDataFromApi() {
+    
+    private func getDataFromApi() {
         apiService.getPhotos(page: page)
             .receive(on: DispatchQueue.main)
             .sink { error in
@@ -23,7 +25,7 @@ final class ImageGalleryScreenViewModel {
             }.store(in: &cancellable)
     }
     
-    func getDataFromDatabase() {
+    private func getDataFromDatabase() {
         DatabaseService.shared.getAllPhotos()
         DatabaseService.shared.$photos
             .receive(on: DispatchQueue.main)
@@ -41,12 +43,12 @@ final class ImageGalleryScreenViewModel {
             photos[$0].likedByUser = nil
         }
         databasePhotos.forEach { item in
-            print("in For each", databasePhotos.count)
             guard let index = (getArrayIndex(item: item)) else { return }
             photos[index].likedByUser = item.likedByUser
         }
     }
-    func getArrayIndex(item: PhotoArray) -> Int? {
+    
+    private func getArrayIndex(item: PhotoArray) -> Int? {
         return photos.firstIndex(where: {$0.id == item.id})
     }
     
