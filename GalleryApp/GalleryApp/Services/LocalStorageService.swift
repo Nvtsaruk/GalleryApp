@@ -5,7 +5,7 @@ final class LocalStorageService {
     
     func store(image: Data, forKey key: String) {
         if let filePath = filePath(forKey: key) {
-            do  {
+            do {
                 try image.write(to: filePath,
                                 options: .atomic)
             } catch let err {
@@ -20,6 +20,18 @@ final class LocalStorageService {
             return fileData
         }
         return nil
+    }
+    
+    func removeImage(forKey key: String) {
+        let fileManager = FileManager.default
+        if let filePath = self.filePath(forKey: key){
+            do {
+               try fileManager.removeItem(at: filePath)
+            } catch {
+                print("Error")
+            }
+            
+        }
     }
     
     private func filePath(forKey key: String) -> URL? {
