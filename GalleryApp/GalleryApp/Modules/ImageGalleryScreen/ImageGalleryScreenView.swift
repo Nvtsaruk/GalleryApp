@@ -10,15 +10,21 @@ class ImageGalleryScreenView: UIViewController {
     private var layout: UICollectionViewCompositionalLayout!
     private var cancellable: Set<AnyCancellable> = []
     private var isPaginating = false
+    private var isFavourite = false
+    
+    let stackView = UIStackView()
+    let optionSwitch = UISwitch()
+    let toggleLabel = UILabel()
     
     private var photoView: UICollectionView! = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configUI()
         setupNavigationTitle()
         configureCollectionViewLayout()
         setupDataSource()
-        configUI()
+        
         viewModel?.getData()
         observe()
     }
@@ -30,6 +36,7 @@ class ImageGalleryScreenView: UIViewController {
         appearance.titleTextAttributes = [.foregroundColor: AppColors.headerColor.color]
         appearance.largeTitleTextAttributes = [.foregroundColor: AppColors.headerColor.color]
         navigationItem.standardAppearance = appearance
+
     }
     
     private func observe() {
@@ -61,18 +68,36 @@ class ImageGalleryScreenView: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Section, PhotoArray>()
         snapshot.appendSections([.main])
         guard let photos = viewModel?.photos else { return }
-        snapshot.appendItems(photos, toSection: .main)
-        dataSource.apply(snapshot, animatingDifferences: false)
+        guard let databasePhotos = viewModel?.databasePhotos else { return }
+        snapshot.appendItems(isFavourite ? databasePhotos : photos, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func configUI() {
         view.backgroundColor = AppColors.background.color
+        view.addSubview(stackView)
+        stackView.addArrangedSubview(toggleLabel)
+        stackView.addArrangedSubview(optionSwitch)
+        stackView.axis = .horizontal
+        stackView.spacing = 5
+        toggleLabel.text = "Favourite"
+        optionSwitch.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
+        
+        stackView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.left.equalTo(view).inset(5)
+        }
+    }
+    
+    @objc func switchChanged() {
+        isFavourite.toggle()
+        reloadSnapshot()
     }
 }
 
 extension ImageGalleryScreenView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel?.pushDetails(id: indexPath.row)
+        viewModel?.pushDetails(id: indexPath.row, isFavorite: isFavourite)
     }
 }
 
@@ -126,7 +151,8 @@ extension ImageGalleryScreenView {
             withReuseIdentifier: FooterView.identifier)
         view.addSubview(photoView)
         photoView.snp.makeConstraints { make in
-            make.left.right.top.bottom.equalTo(self.view)
+            make.left.right.bottom.equalTo(self.view)
+            make.top.equalTo(stackView.snp.bottom).offset(5)
         }
         photoView.backgroundColor = .clear
     }
@@ -139,7 +165,7 @@ extension ImageGalleryScreenView {
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: PhotoCell.identifier,
                     for: indexPath) as? PhotoCell
-                cell?.configure(index: String(self.viewModel?.photos[indexPath.row].id ?? ""), item: item)
+                cell?.configure(index: item.id, item: item, isFav: item.likedByUser ?? false)
                 return cell
             }
         }

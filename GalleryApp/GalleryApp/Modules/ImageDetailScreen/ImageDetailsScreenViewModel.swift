@@ -7,7 +7,7 @@ final class ImageDetailsScreenViewModel {
     @Published var photos: [PhotoArray] = []
     private var cancellable: Set<AnyCancellable> = []
     var id = 0
-    
+    var isFavourite = false
     var page = 1
     func getData() {
         apiService.getPhotos(page: page)
@@ -19,7 +19,6 @@ final class ImageDetailsScreenViewModel {
     }
     func toggleFavourites(regularImage: Data?) {
         if photos[id].likedByUser ?? false {
-            print("Unlike")
             DatabaseService.shared.deleteFromDatabase(id: photos[id].id)
             photos[id].likedByUser?.toggle()
         } else {
@@ -35,7 +34,7 @@ final class ImageDetailsScreenViewModel {
     }
 
     func backToMainView() {
-        coordinator?.backToMainView(id: id, photos: photos, page: page)
+        coordinator?.backToMainView(id: id, photos: isFavourite ? photos : nil, page: page)
     }
 
 }

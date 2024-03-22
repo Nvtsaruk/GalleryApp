@@ -1,8 +1,11 @@
 import RealmSwift
+import Combine
 
 final class DatabaseService {
     static var shared = DatabaseService()
     private init() {}
+    
+    @Published var photos: [PhotoArray] = []
     
     let realm = try? Realm()
     
@@ -26,6 +29,25 @@ final class DatabaseService {
         }
         return allPhotos
     }
+    
+    func observe() {
+        guard let dbPhotos = realm?.objects(DatabasePhotos.self) else { return }
+        let notificationToken = dbPhotos.observe { (changes) in
+            switch changes {
+            case .initial: break
+                // Results are now populated and can be accessed without blocking the UI
+            case .update(_, let deletions, let insertions, let modifications):
+                // Query results have changed.
+                print("Deleted indices: ", deletions)
+                print("Inserted indices: ", insertions)
+                print("Modified modifications: ", modifications)
+            case .error(let error):
+                // An error occurred while opening the Realm file on the background worker thread
+                fatalError("\(error)")
+            }
+        }
+    }
+    
     func deleteFromDatabase(id: String) {
         try? realm?.write {
             let dbPhotos = realm?.objects(DatabasePhotos.self).where {
