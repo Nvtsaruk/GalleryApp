@@ -24,7 +24,6 @@ class ImageGalleryScreenView: UIViewController {
         setupNavigationTitle()
         configureCollectionViewLayout()
         setupDataSource()
-        
         viewModel?.getData()
         observe()
     }

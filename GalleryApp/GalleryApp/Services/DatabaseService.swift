@@ -18,34 +18,17 @@ final class DatabaseService {
         try? realm?.write {
             realm?.add(dbPhotos)
         }
+        getAllPhotos()
     }
     
-    func getAllPhotos() -> [PhotoArray] {
+    func getAllPhotos() {
         var allPhotos: [PhotoArray] = []
         let dbPhotos = realm?.objects(DatabasePhotos.self)
         dbPhotos?.forEach { photo in
             guard let dbMap = DatabaseToModel(dbPhotos: photo).databaseToModel() else { return }
             allPhotos.append(dbMap)
         }
-        return allPhotos
-    }
-    
-    func observe() {
-        guard let dbPhotos = realm?.objects(DatabasePhotos.self) else { return }
-        let notificationToken = dbPhotos.observe { (changes) in
-            switch changes {
-            case .initial: break
-                // Results are now populated and can be accessed without blocking the UI
-            case .update(_, let deletions, let insertions, let modifications):
-                // Query results have changed.
-                print("Deleted indices: ", deletions)
-                print("Inserted indices: ", insertions)
-                print("Modified modifications: ", modifications)
-            case .error(let error):
-                // An error occurred while opening the Realm file on the background worker thread
-                fatalError("\(error)")
-            }
-        }
+        photos = allPhotos
     }
     
     func deleteFromDatabase(id: String) {
@@ -55,6 +38,8 @@ final class DatabaseService {
             }
             guard let dbPhotos = dbPhotos else { return }
             realm?.delete(dbPhotos)
+            getAllPhotos()
         }
+        
     }
 }

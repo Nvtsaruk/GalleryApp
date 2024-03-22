@@ -59,7 +59,6 @@ final class DetailView: UIView {
         
         userLabel.text = user
         userLabel.textColor = AppColors.mainTextColor.color
-        
         isFavourite = isFav
         setupButton()
         favButton.addTarget(self, action: #selector(self.favButtonAction), for: .touchUpInside)
@@ -74,11 +73,11 @@ final class DetailView: UIView {
     }
     
     @objc func favButtonAction() {
-        isFavourite.toggle()
-        setupButton()
         guard let regularUrl = viewModel?.photos[viewModel?.id ?? 0].urls.regular else { return }
         let regularImage = SDImageCache.shared.imageFromCache(forKey: regularUrl)?.jpegData(compressionQuality: 0.9)
         viewModel?.toggleFavourites(regularImage: regularImage)
+        isFavourite.toggle()
+        setupButton()
     }
     
     private func layout() {

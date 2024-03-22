@@ -16,7 +16,7 @@ extension PhotoArray: Hashable {
         hasher.combine(uuid)
     }
     static func == (lhs: PhotoArray, rhs: PhotoArray) -> Bool {
-        return lhs.uuid == rhs.uuid
+        return lhs.uuid == rhs.uuid && lhs.likedByUser == rhs.likedByUser
     }
 }
 

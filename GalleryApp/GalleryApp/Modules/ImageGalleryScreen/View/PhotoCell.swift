@@ -9,6 +9,10 @@ final class PhotoCell: UICollectionViewCell {
         configUI()
     }
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func configure(index: String, item: PhotoArray, isFav: Bool) {
         photoImageView.sd_setImage(with: URL(string: item.urls.small))
         photoImageView.heroID = index
@@ -37,7 +41,4 @@ final class PhotoCell: UICollectionViewCell {
         
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }

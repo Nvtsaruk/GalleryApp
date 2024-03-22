@@ -6,7 +6,12 @@ final class ImageGalleryScreenViewModel {
     let apiService = ApiService()
     private var cancellable: Set<AnyCancellable> = []
     @Published var photos: [PhotoArray] = []
-    @Published var databasePhotos: [PhotoArray] = []
+    @Published var databasePhotos: [PhotoArray] = [] {
+        didSet {
+            print(databasePhotos.count)
+//            addFavs()
+        }
+    }
     @Published var id = 0
     var page = 1
     func getData() {
@@ -15,20 +20,33 @@ final class ImageGalleryScreenViewModel {
     }
     func getDataFromApi() {
         apiService.getPhotos(page: page)
+            .receive(on: DispatchQueue.main)
             .sink { error in
                 print(error)
-            } receiveValue: { photos in
-                self.photos.append(contentsOf: photos)
+            } receiveValue: { [weak self] photos in
+                self?.photos.append(contentsOf: photos)
             }.store(in: &cancellable)
     }
     
     func getDataFromDatabase() {
-        databasePhotos = DatabaseService.shared.getAllPhotos()
-        let observer = DatabaseService.shared.observe()
+        DatabaseService.shared.getAllPhotos()
+        DatabaseService.shared.$photos
+            .receive(on: DispatchQueue.main)
+            .sink { error in
+                print(error)
+            } receiveValue: { [weak self] photos in
+                self?.databasePhotos = photos
+                self?.addFavs()
+            }.store(in: &cancellable)
         addFavs()
     }
+
     private func addFavs() {
+        photos.indices.forEach {
+            photos[$0].likedByUser = nil
+        }
         databasePhotos.forEach { item in
+            print("in For each", databasePhotos.count)
             guard let index = (getArrayIndex(item: item)) else { return }
             photos[index].likedByUser = item.likedByUser
         }
@@ -39,9 +57,9 @@ final class ImageGalleryScreenViewModel {
     
     func pushDetails(id: Int, isFavorite: Bool) {
         if !isFavorite {
-            coordinator?.pushDetailsView(id: id, photos: photos, page: page, isFavourite: isFavorite)
+            coordinator?.pushDetailsView(id: id, photos: photos, page: page)
         } else {
-            coordinator?.pushDetailsView(id: id, photos: databasePhotos, page: page, isFavourite: isFavorite)
+            coordinator?.pushDetailsView(id: id, photos: databasePhotos, page: page)
         }
     }
 }
