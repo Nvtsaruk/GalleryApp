@@ -15,7 +15,8 @@ final class PhotoCell: UICollectionViewCell {
     
     func configure(index: String, item: PhotoArray, isFav: Bool, isFavouriteTab: Bool) {
         if isFavouriteTab {
-            guard let image = LocalStorageService.shared.retrieveImage(forKey: item.imageUrlRegular ?? "") else { return }
+            guard let image = LocalStorageService.shared.retrieveImage(forKey: item.imageUrlRegular ?? "")
+            else { return }
             photoImageView.image = UIImage(data: image)
         } else {
             photoImageView.sd_setImage(with: URL(string: item.urls.small))

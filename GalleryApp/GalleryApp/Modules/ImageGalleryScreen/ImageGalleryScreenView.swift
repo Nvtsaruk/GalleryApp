@@ -101,6 +101,7 @@ final class ImageGalleryScreenView: UIViewController {
         optionSwitch.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
     
         isEmptyLabel.text = "Is empty"
+        setupViewConstraints()
     }
     
     @objc func switchChanged() {
@@ -184,8 +185,7 @@ extension ImageGalleryScreenView {
             }
         }
     }
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
+    private func setupViewConstraints() {
         guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
         if orientation.isPortrait {
             photoView.snp.makeConstraints { make in
@@ -193,11 +193,11 @@ extension ImageGalleryScreenView {
                 make.top.equalTo(stackView.snp.bottom).offset(5)
             }
             stackView.snp.makeConstraints { make in
-                make.top.equalTo(view.safeAreaLayoutGuide)
-                make.left.equalTo(view).inset(5)
+                make.top.equalTo(self.view.safeAreaLayoutGuide)
+                make.left.equalTo(self.view).inset(5)
             }
             isEmptyLabel.snp.makeConstraints { make in
-                make.center.equalTo(view.center)
+                make.center.equalTo(self.view.center)
             }
         } else {
             photoView.snp.makeConstraints { make in
