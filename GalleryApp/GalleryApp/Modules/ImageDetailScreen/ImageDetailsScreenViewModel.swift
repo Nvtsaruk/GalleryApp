@@ -20,6 +20,7 @@ final class ImageDetailsScreenViewModel {
     func toggleFavourites(regularImage: Data?) {
         if photos[id].likedByUser ?? false {
             DatabaseService.shared.deleteFromDatabase(id: photos[id].id)
+            LocalStorageService.shared.removeImage(forKey: photos[id].id)
             photos[id].likedByUser?.toggle()
         } else {
             guard let regularImage = regularImage else { return }

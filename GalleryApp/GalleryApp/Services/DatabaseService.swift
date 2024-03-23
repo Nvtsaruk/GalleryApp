@@ -15,7 +15,6 @@ final class DatabaseService {
         dbPhotos = modelToDatabase.modelToDatabase()
         dbPhotos.likedByUser = true
         dbPhotos.localUrlRegular = imageUrlRegular
-        print("In service", dbPhotos.localUrlRegular)
         try? realm?.write {
             realm?.add(dbPhotos)
         }
@@ -26,7 +25,6 @@ final class DatabaseService {
         var allPhotos: [PhotoArray] = []
         let dbPhotos = realm?.objects(DatabasePhotos.self)
         dbPhotos?.forEach { photo in
-            print("In db load", photo.localUrlRegular)
             guard let dbMap = DatabaseToModel(dbPhotos: photo).databaseToModel() else { return }
             allPhotos.append(dbMap)
         }

@@ -3,7 +3,7 @@ import SnapKit
 import SDWebImage
 import Combine
 
-class ImageGalleryScreenView: UIViewController {
+final class ImageGalleryScreenView: UIViewController {
     
     var viewModel: ImageGalleryScreenViewModel?
     private var dataSource: UICollectionViewDiffableDataSource<Section, PhotoArray>!
@@ -12,18 +12,20 @@ class ImageGalleryScreenView: UIViewController {
     private var isPaginating = false
     private var isFavourite = false
     
-    let stackView = UIStackView()
-    let optionSwitch = UISwitch()
-    let toggleLabel = UILabel()
-    
+    private let stackView = UIStackView()
+    private let optionSwitch = UISwitch()
+    private let toggleLabel = UILabel()
+    private let isEmptyLabel = UILabel()
     private var photoView: UICollectionView! = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configUI()
+        
         setupNavigationTitle()
         configureCollectionViewLayout()
         setupDataSource()
+        configUI()
+        setupConstraints()
         viewModel?.getData()
         observe()
     }
@@ -52,7 +54,7 @@ class ImageGalleryScreenView: UIViewController {
     }
     
     func scrollToItem(id: Int) {
-        if photoView.numberOfSections != 0 {
+        if photoView.numberOfSections != 0 && (viewModel?.databasePhotos.count ?? 0) - 1 >= id {
             if photoView.numberOfItems(inSection: 0) < viewModel?.photos.count ?? 0 {
                 self.reloadSnapshot()
             }
@@ -65,26 +67,33 @@ class ImageGalleryScreenView: UIViewController {
     private func reloadSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, PhotoArray>()
         snapshot.appendSections([.main])
-        guard let photos = viewModel?.photos else { return }
-        guard let databasePhotos = viewModel?.databasePhotos else { return }
+        guard let photos = viewModel?.photos,
+              let databasePhotos = viewModel?.databasePhotos,
+              let empty = viewModel?.databasePhotos.isEmpty else { return }
         snapshot.appendItems(isFavourite ? databasePhotos : photos, toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: true)
+        if isFavourite && (empty) {
+            isEmptyLabel.isHidden = false
+        } else {
+            isEmptyLabel.isHidden = true
+        }
     }
     
     private func configUI() {
         view.backgroundColor = AppColors.background.color
         view.addSubview(stackView)
+        view.addSubview(photoView)
+        view.addSubview(isEmptyLabel)
+        
         stackView.addArrangedSubview(toggleLabel)
         stackView.addArrangedSubview(optionSwitch)
         stackView.axis = .horizontal
         stackView.spacing = 5
+        
         toggleLabel.text = "Favourite"
         optionSwitch.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
-        
-        stackView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.left.equalTo(view).inset(5)
-        }
+    
+        isEmptyLabel.text = "Is empty"
     }
     
     @objc func switchChanged() {
@@ -116,26 +125,6 @@ extension ImageGalleryScreenView {
         layout.scrollDirection = .vertical
         return layout
     }
-    private func fixedSpacedFlowLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .estimated(view.frame.width/3 - 2),
-            heightDimension: .estimated(view.frame.width/3 - 2)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.edgeSpacing = NSCollectionLayoutEdgeSpacing(
-            leading: .fixed(1),
-            top: .fixed(1),
-            trailing: .fixed(1),
-            bottom: .fixed(1)
-        )
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(100)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        return UICollectionViewCompositionalLayout(section: section)
-    }
     
     private func configureCollectionViewLayout() {
         photoView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -147,12 +136,22 @@ extension ImageGalleryScreenView {
             FooterView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
             withReuseIdentifier: FooterView.identifier)
-        view.addSubview(photoView)
+        
+        photoView.backgroundColor = .clear
+    }
+    
+    private func setupConstraints() {
         photoView.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(self.view)
             make.top.equalTo(stackView.snp.bottom).offset(5)
         }
-        photoView.backgroundColor = .clear
+        stackView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.left.equalTo(view).inset(5)
+        }
+        isEmptyLabel.snp.makeConstraints { make in
+            make.center.equalTo(view.center)
+        }
     }
     
     private func setupDataSource() {
@@ -163,7 +162,10 @@ extension ImageGalleryScreenView {
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: PhotoCell.identifier,
                     for: indexPath) as? PhotoCell
-                cell?.configure(index: item.id, item: item, isFav: item.likedByUser ?? false)
+                cell?.configure(index: item.id,
+                                item: item,
+                                isFav: item.likedByUser ?? false,
+                                isFavouriteTab: self.isFavourite)
                 return cell
             }
         }

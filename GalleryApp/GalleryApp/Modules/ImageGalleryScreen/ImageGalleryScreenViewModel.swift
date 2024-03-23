@@ -6,13 +6,7 @@ final class ImageGalleryScreenViewModel {
     let apiService = ApiService()
     private var cancellable: Set<AnyCancellable> = []
     @Published var photos: [PhotoArray] = []
-    @Published var databasePhotos: [PhotoArray] = [] {
-        didSet {
-            databasePhotos.forEach{ item in
-                print("Url", item.imageUrlRegular)
-            }
-        }
-    }
+    @Published var databasePhotos: [PhotoArray] = [] 
     @Published var id = 0
     var page = 1
     

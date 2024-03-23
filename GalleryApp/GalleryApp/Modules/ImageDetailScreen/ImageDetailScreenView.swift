@@ -23,9 +23,9 @@ class ImageDetailScreenView: UIViewController {
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
         swipeRight.direction = .right
         self.view.addGestureRecognizer(swipeRight)
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
-        swipeDown.direction = .left
-        self.view.addGestureRecognizer(swipeDown)
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
+        swipeLeft.direction = .left
+        self.view.addGestureRecognizer(swipeLeft)
     }
     
     @objc func respondToSwipeGesture(gesture: UIGestureRecognizer) {
@@ -44,9 +44,16 @@ class ImageDetailScreenView: UIViewController {
                     viewModel?.id += 1
                     updateUI()
                 } else {
-                    viewModel?.page += 1
-                    viewModel?.getData()
-                    viewModel?.id += 1
+                    guard let isFavourite = viewModel?.isFavourite else { return }
+                    if !isFavourite {
+                        viewModel?.id = 0
+                        updateUI()
+
+                    } else {
+                        viewModel?.page += 1
+                        viewModel?.getData()
+                        viewModel?.id += 1
+                    }
                 }
             default:
                 break
@@ -75,8 +82,15 @@ class ImageDetailScreenView: UIViewController {
                           duration: AnimationConstants.animationDuration.rawValue,
                           options: .transitionCrossDissolve,
                           animations: {
-            let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
-            self.detailView.descriptionLabel.text = description ?? "No description"
+//            let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
+//            self.detailView.descriptionLabel.text = description ?? "No description"
+            guard let width = self.viewModel?.photos[self.viewModel?.id ?? 0].width,
+                  let height = self.viewModel?.photos[self.viewModel?.id ?? 0].height else { return }
+            self.detailView.configure(descLabelText: self.viewModel?.photos[self.viewModel?.id ?? 0].description ?? "No description",
+                                 width: width,
+                                 height: height,
+                                      user: self.viewModel?.photos[self.viewModel?.id ?? 0].user.username ?? "No name",
+                                      isFav: (self.viewModel?.photos[self.viewModel?.id ?? 0].likedByUser ?? false))
         }, completion: nil)
     }
     

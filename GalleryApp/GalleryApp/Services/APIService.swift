@@ -10,6 +10,11 @@ final class ApiService {
             return URLSession.shared.dataTaskPublisher(for: request)
                 .map(\.data)
                 .decode(type: [PhotoArray].self, decoder: JSONDecoder())
+//                .mapError({ error in
+//                        switch error {
+//                        case 
+//                      })
                 .eraseToAnyPublisher()
     }
 }
+

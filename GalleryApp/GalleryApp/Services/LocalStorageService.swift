@@ -24,7 +24,7 @@ final class LocalStorageService {
     
     func removeImage(forKey key: String) {
         let fileManager = FileManager.default
-        if let filePath = self.filePath(forKey: key){
+        if let filePath = self.filePath(forKey: key) {
             do {
                try fileManager.removeItem(at: filePath)
             } catch {
