@@ -48,7 +48,7 @@ class ImageDetailScreenView: UIViewController {
                     if !isFavourite {
                         viewModel?.id = 0
                         updateUI()
-
+                        
                     } else {
                         viewModel?.page += 1
                         viewModel?.getData()
@@ -74,21 +74,22 @@ class ImageDetailScreenView: UIViewController {
                           duration: AnimationConstants.animationDuration.rawValue,
                           options: .transitionCrossDissolve,
                           animations: {
-            let imageUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular ?? ""
-            self.imageView.photoImageView.sd_setImage(with: URL(string: imageUrl))
-            self.imageView.photoImageView.heroID = String(self.viewModel?.photos[self.viewModel?.id ?? 0].id ?? "")
+            guard let regularUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular,
+                  let smallURL = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.small else { return }
+            self.imageView.configure(imageUrl: URL(string: regularUrl),
+                                placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL),
+                                     heroId: String(self.viewModel?.photos[self.viewModel?.id ?? 0].id ?? ""))
         }, completion: nil)
         UIView.transition(with: self.detailView,
                           duration: AnimationConstants.animationDuration.rawValue,
                           options: .transitionCrossDissolve,
                           animations: {
-//            let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
-//            self.detailView.descriptionLabel.text = description ?? "No description"
+            let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
             guard let width = self.viewModel?.photos[self.viewModel?.id ?? 0].width,
                   let height = self.viewModel?.photos[self.viewModel?.id ?? 0].height else { return }
-            self.detailView.configure(descLabelText: self.viewModel?.photos[self.viewModel?.id ?? 0].description ?? "No description",
-                                 width: width,
-                                 height: height,
+            self.detailView.configure(descLabelText: description ?? "No description",
+                                      width: width,
+                                      height: height,
                                       user: self.viewModel?.photos[self.viewModel?.id ?? 0].user.username ?? "No name",
                                       isFav: (self.viewModel?.photos[self.viewModel?.id ?? 0].likedByUser ?? false))
         }, completion: nil)
@@ -106,25 +107,14 @@ class ImageDetailScreenView: UIViewController {
         self.navigationItem.setLeftBarButton(backToRootVCButton, animated: true)
         view.backgroundColor = AppColors.background.color
         view.addSubview(imageView)
-        guard let regularUrl = viewModel?.photos[viewModel?.id ?? 0].urls.regular,
-              let smallURL = viewModel?.photos[viewModel?.id ?? 0].urls.small else { return }
-        imageView.configure(imageUrl: URL(string: regularUrl),
-                            placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL),
-                            heroId: String(viewModel?.photos[viewModel?.id ?? 0].id ?? ""))
-        imageView.clipsToBounds = true
         view.addSubview(detailView)
+        
         detailView.heroModifiers = [.fade, .translate(x: 0, y: 400)]
         detailView.backgroundColor = AppColors.descriptionBackground.color
         detailView.layer.cornerRadius = UIConstants.cornerRadius.rawValue
-
-        guard let width = viewModel?.photos[viewModel?.id ?? 0].width,
-              let height = viewModel?.photos[viewModel?.id ?? 0].height else { return }
-        detailView.configure(descLabelText: viewModel?.photos[viewModel?.id ?? 0].description ?? "No description",
-                             width: width,
-                             height: height,
-                             user: viewModel?.photos[viewModel?.id ?? 0].user.username ?? "No name",
-                             isFav: ((viewModel?.photos[viewModel?.id ?? 0].likedByUser) != nil))
         detailView.viewModel = viewModel
+        
+        updateUI()
         setupConstraints()
     }
     private func setupConstraints() {
