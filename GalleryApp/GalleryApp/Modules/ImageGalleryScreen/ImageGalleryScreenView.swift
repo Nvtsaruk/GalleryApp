@@ -31,10 +31,14 @@ final class ImageGalleryScreenView: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         photoView.collectionViewLayout.invalidateLayout()
+//        updateCollectionViewLayout()
+//        photoView.layoutIfNeeded()
         updateConstraints()
     }
     override func viewWillLayoutSubviews() {
-        updateCollectionViewLayout()
+        super.viewWillLayoutSubviews()
+//        photoView.collectionViewLayout.invalidateLayout()
+//        updateCollectionViewLayout()
     }
     
     private func setupNavigationTitle() {
@@ -49,7 +53,7 @@ final class ImageGalleryScreenView: UIViewController {
     private func observe() {
         viewModel?.$photos
             .filter { !$0.isEmpty }
-            .receive(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.global(qos: .userInitiated))
             .sink { [weak self] _ in
                 self?.reloadSnapshot()
             }.store(in: &cancellable)
@@ -61,10 +65,13 @@ final class ImageGalleryScreenView: UIViewController {
     }
     
     func scrollToItem(id: Int) {
-        if photoView.numberOfSections != 0 && (viewModel?.databasePhotos.count ?? 0) - 1 >= id {
+        guard let dbPhotCount = viewModel?.databasePhotos.count,
+              let apiPhotoCount = viewModel?.photos.count else { return }
+        if photoView.numberOfSections != 0 && (isFavourite ? dbPhotCount : apiPhotoCount) - 1 >= id {
             if photoView.numberOfItems(inSection: 0) < viewModel?.photos.count ?? 0 {
                 self.reloadSnapshot()
             }
+            print("Here")
             photoView.scrollToItem(at: IndexPath(row: id, section: 0),
                                    at: [.centeredVertically, .centeredHorizontally],
                                    animated: true)
@@ -79,11 +86,14 @@ final class ImageGalleryScreenView: UIViewController {
               let empty = viewModel?.databasePhotos.isEmpty else { return }
         snapshot.appendItems(isFavourite ? databasePhotos : photos, toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: true)
-        if isFavourite && (empty) {
-            isEmptyLabel.isHidden = false
-        } else {
-            isEmptyLabel.isHidden = true
+        DispatchQueue.main.async {
+            if self.isFavourite && (empty) {
+                self.isEmptyLabel.isHidden = false
+            } else {
+                self.isEmptyLabel.isHidden = true
+            }
         }
+        
     }
     
     private func configUI() {
@@ -101,6 +111,7 @@ final class ImageGalleryScreenView: UIViewController {
         optionSwitch.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
     
         isEmptyLabel.text = "Is empty"
+        setupViewConstraints()
     }
     
     @objc func switchChanged() {
@@ -135,13 +146,13 @@ extension ImageGalleryScreenView {
     }
     
     private func updateCollectionViewLayout() {
+        print("Creating layout")
         photoView.collectionViewLayout = createLayout()
     }
     
     private func configureCollectionViewLayout() {
         
         photoView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        print(photoView.collectionViewLayout)
         photoView.collectionViewLayout = createLayout()
         photoView.delegate = self
         photoView.register(
@@ -184,8 +195,7 @@ extension ImageGalleryScreenView {
             }
         }
     }
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
+    private func setupViewConstraints() {
         guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
         if orientation.isPortrait {
             photoView.snp.makeConstraints { make in
@@ -193,11 +203,11 @@ extension ImageGalleryScreenView {
                 make.top.equalTo(stackView.snp.bottom).offset(5)
             }
             stackView.snp.makeConstraints { make in
-                make.top.equalTo(view.safeAreaLayoutGuide)
-                make.left.equalTo(view).inset(5)
+                make.top.equalTo(self.view.safeAreaLayoutGuide)
+                make.left.equalTo(self.view).inset(5)
             }
             isEmptyLabel.snp.makeConstraints { make in
-                make.center.equalTo(view.center)
+                make.center.equalTo(self.view.center)
             }
         } else {
             photoView.snp.makeConstraints { make in

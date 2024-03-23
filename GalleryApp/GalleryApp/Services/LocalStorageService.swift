@@ -37,7 +37,8 @@ final class LocalStorageService {
     private func filePath(forKey key: String) -> URL? {
         let fileManager = FileManager.default
         guard let documentURL = fileManager.urls(for: .documentDirectory,
-                                                 in: FileManager.SearchPathDomainMask.userDomainMask).first else { return nil }
+                                                 in: FileManager.SearchPathDomainMask.userDomainMask).first
+        else { return nil }
         
         return documentURL.appendingPathComponent(key + ".jpg")
     }

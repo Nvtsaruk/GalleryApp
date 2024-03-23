@@ -7,7 +7,11 @@ final class ImageGalleryScreenViewModel {
     private var cancellable: Set<AnyCancellable> = []
     @Published var photos: [PhotoArray] = []
     @Published var databasePhotos: [PhotoArray] = [] 
-    @Published var id = 0
+    @Published var id = 0 {
+        didSet {
+            print(id)
+        }
+    }
     var page = 1
     
     func getData() {
