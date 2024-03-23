@@ -16,7 +16,7 @@ final class ImageGalleryScreenView: UIViewController {
     private let optionSwitch = UISwitch()
     private let toggleLabel = UILabel()
     private let isEmptyLabel = UILabel()
-    private var photoView: UICollectionView! = nil
+    private var photoView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,16 +31,9 @@ final class ImageGalleryScreenView: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         photoView.collectionViewLayout.invalidateLayout()
-//        updateCollectionViewLayout()
-//        photoView.layoutIfNeeded()
         updateConstraints()
     }
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-//        photoView.collectionViewLayout.invalidateLayout()
-//        updateCollectionViewLayout()
-    }
-    
+
     private func setupNavigationTitle() {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Gallery App"
@@ -49,11 +42,11 @@ final class ImageGalleryScreenView: UIViewController {
         appearance.largeTitleTextAttributes = [.foregroundColor: AppColors.headerColor.color]
         navigationItem.standardAppearance = appearance
     }
-    
+
     private func observe() {
         viewModel?.$photos
             .filter { !$0.isEmpty }
-            .receive(on: DispatchQueue.global(qos: .userInitiated))
+            .receive(on: DispatchQueue.global())
             .sink { [weak self] _ in
                 self?.reloadSnapshot()
             }.store(in: &cancellable)
@@ -120,10 +113,15 @@ final class ImageGalleryScreenView: UIViewController {
     }
 }
 
-extension ImageGalleryScreenView: UICollectionViewDelegate {
+extension ImageGalleryScreenView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         viewModel?.pushDetails(id: indexPath.row, isFavorite: isFavourite)
     }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
+        let width = (orientation?.isPortrait ?? false) ? (view.frame.width/3)-5 : (view.frame.width/6)
+        return CGSize(width: width, height: width)
+        }
 }
 
 // MARK: - Setup CollectionView
@@ -134,11 +132,8 @@ extension ImageGalleryScreenView {
     }
     
     private func createLayout() -> UICollectionViewFlowLayout {
-        let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
         let layout = UICollectionViewFlowLayout()
-        let width = (orientation?.isPortrait ?? false) ? (view.frame.width/3)-5 : (view.frame.width/6)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-        layout.itemSize = CGSize(width: width, height: width)
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 3
         layout.scrollDirection = .vertical
@@ -153,7 +148,6 @@ extension ImageGalleryScreenView {
     private func configureCollectionViewLayout() {
         
         photoView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        photoView.collectionViewLayout = createLayout()
         photoView.delegate = self
         photoView.register(
             PhotoCell.self,
