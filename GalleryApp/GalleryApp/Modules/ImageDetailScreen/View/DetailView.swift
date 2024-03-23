@@ -14,6 +14,7 @@ final class DetailView: UIView {
     let userTitle = UILabel()
     let userLabel = UILabel()
     let favButton = UIButton()
+    let blankView = UIView()
     
     var viewModel: ImageDetailsScreenViewModel?
     
@@ -22,7 +23,6 @@ final class DetailView: UIView {
         addSubview(favButton)
         configureStack()
         addSubview(stackView)
-        layout()
     }
     
     required init?(coder: NSCoder) {
@@ -31,7 +31,8 @@ final class DetailView: UIView {
     
     private func configureStack() {
         stackView.axis = .vertical
-        stackView.distribution = .fillEqually
+        stackView.distribution = .fill
+        stackView.spacing = 0
         stackView.addArrangedSubview(descriptionTitle)
         stackView.addArrangedSubview(descriptionLabel)
         stackView.addArrangedSubview(sizeTitle)
@@ -80,15 +81,28 @@ final class DetailView: UIView {
         setupButton()
     }
     
-    private func layout() {
-        favButton.snp.makeConstraints { make in
-            make.left.top.equalToSuperview().offset(10)
-            make.height.width.equalTo(48)
-        }
-        stackView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(10)
-            make.top.equalTo(favButton.snp.bottom)
-            make.height.equalTo(140)
+    override func updateConstraints() {
+        super.updateConstraints()
+        guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
+        if orientation.isLandscape {
+            favButton.snp.makeConstraints { make in
+                make.left.top.equalToSuperview().offset(10)
+                make.height.width.equalTo(48)
+            }
+            stackView.snp.makeConstraints { make in
+                make.left.right.equalToSuperview().inset(10)
+                make.top.equalTo(favButton.snp.bottom)
+
+            }
+        } else {
+            favButton.snp.makeConstraints { make in
+                make.left.top.equalToSuperview().offset(10)
+                make.height.width.equalTo(48)
+            }
+            stackView.snp.makeConstraints { make in
+                make.left.right.equalToSuperview().inset(10)
+                make.top.equalTo(favButton.snp.bottom)
+            }
         }
     }
 }

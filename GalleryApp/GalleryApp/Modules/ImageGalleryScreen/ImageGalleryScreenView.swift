@@ -25,9 +25,16 @@ final class ImageGalleryScreenView: UIViewController {
         configureCollectionViewLayout()
         setupDataSource()
         configUI()
-        setupConstraints()
         viewModel?.getData()
         observe()
+    }
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        photoView.collectionViewLayout.invalidateLayout()
+        updateConstraints()
+    }
+    override func viewWillLayoutSubviews() {
+        updateCollectionViewLayout()
     }
     
     private func setupNavigationTitle() {
@@ -116,8 +123,9 @@ extension ImageGalleryScreenView {
     }
     
     private func createLayout() -> UICollectionViewFlowLayout {
+        let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
         let layout = UICollectionViewFlowLayout()
-        let width = (view.frame.width/3)-5
+        let width = (orientation?.isPortrait ?? false) ? (view.frame.width/3)-5 : (view.frame.width/6)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         layout.itemSize = CGSize(width: width, height: width)
         layout.minimumInteritemSpacing = 0
@@ -126,8 +134,15 @@ extension ImageGalleryScreenView {
         return layout
     }
     
+    private func updateCollectionViewLayout() {
+        photoView.collectionViewLayout = createLayout()
+    }
+    
     private func configureCollectionViewLayout() {
+        
         photoView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        print(photoView.collectionViewLayout)
+        photoView.collectionViewLayout = createLayout()
         photoView.delegate = self
         photoView.register(
             PhotoCell.self,
@@ -140,17 +155,63 @@ extension ImageGalleryScreenView {
         photoView.backgroundColor = .clear
     }
     
-    private func setupConstraints() {
-        photoView.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(self.view)
-            make.top.equalTo(stackView.snp.bottom).offset(5)
+    private func updateConstraints() {
+        guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
+        if orientation.isPortrait {
+            photoView.snp.remakeConstraints { make in
+                make.left.right.bottom.equalTo(self.view)
+                make.top.equalTo(stackView.snp.bottom).offset(5)
+            }
+            stackView.snp.remakeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide)
+                make.left.equalTo(view).inset(5)
+            }
+            isEmptyLabel.snp.updateConstraints { make in
+                make.center.equalTo(view.center)
+            }
+        } else {
+            photoView.snp.remakeConstraints { make in
+                make.left.right.equalTo(self.view.safeAreaLayoutGuide)
+                make.bottom.equalTo(self.view)
+                make.top.equalTo(stackView.snp.bottom).offset(5)
+            }
+            stackView.snp.remakeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide)
+                make.left.equalTo(view.safeAreaLayoutGuide)
+            }
+            isEmptyLabel.snp.updateConstraints { make in
+                make.center.equalTo(view.center)
+            }
         }
-        stackView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.left.equalTo(view).inset(5)
-        }
-        isEmptyLabel.snp.makeConstraints { make in
-            make.center.equalTo(view.center)
+    }
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
+        if orientation.isPortrait {
+            photoView.snp.makeConstraints { make in
+                make.left.right.bottom.equalTo(self.view)
+                make.top.equalTo(stackView.snp.bottom).offset(5)
+            }
+            stackView.snp.makeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide)
+                make.left.equalTo(view).inset(5)
+            }
+            isEmptyLabel.snp.makeConstraints { make in
+                make.center.equalTo(view.center)
+            }
+        } else {
+            photoView.snp.makeConstraints { make in
+                make.left.right.equalTo(self.view.safeAreaLayoutGuide)
+                make.bottom.equalTo(self.view)
+                make.top.equalTo(stackView.snp.bottom).offset(5)
+            }
+            stackView.snp.makeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide)
+                make.left.equalTo(view.safeAreaLayoutGuide)
+            }
+            isEmptyLabel.snp.makeConstraints { make in
+                make.center.equalTo(view.center)
+            }
         }
     }
     
@@ -170,7 +231,7 @@ extension ImageGalleryScreenView {
             }
         }
         
-        dataSource.supplementaryViewProvider = { [unowned self] (collectionView, kind, indexPath) in
+        dataSource.supplementaryViewProvider = { [unowned self] (_, _, indexPath) in
             guard let footerView = self.photoView.dequeueReusableSupplementaryView(
                 ofKind: UICollectionView.elementKindSectionFooter,
                 withReuseIdentifier: FooterView.identifier, for: indexPath) as? FooterView else { fatalError() }

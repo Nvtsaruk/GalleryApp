@@ -12,11 +12,18 @@ class ImageDetailScreenView: UIViewController {
     private var cancellable: Set<AnyCancellable> = []
     lazy var imageView = ImageView()
     lazy var detailView = DetailView()
+    private let stackView = UIStackView()
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupGestures()
         observe()
+    }
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        updateConstraints()
+        imageView.updateConstraints()
+        detailView.updateConstraints()
     }
     
     private func setupGestures() {
@@ -77,7 +84,7 @@ class ImageDetailScreenView: UIViewController {
             guard let regularUrl = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.regular,
                   let smallURL = self.viewModel?.photos[self.viewModel?.id ?? 0].urls.small else { return }
             self.imageView.configure(imageUrl: URL(string: regularUrl),
-                                placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL),
+                                     placeholderImage: SDImageCache.shared.imageFromCache(forKey: smallURL),
                                      heroId: String(self.viewModel?.photos[self.viewModel?.id ?? 0].id ?? ""))
         }, completion: nil)
         UIView.transition(with: self.detailView,
@@ -106,10 +113,12 @@ class ImageDetailScreenView: UIViewController {
                                                       action: #selector(backToMainView))
         self.navigationItem.setLeftBarButton(backToRootVCButton, animated: true)
         view.backgroundColor = AppColors.background.color
-        view.addSubview(imageView)
-        view.addSubview(detailView)
-        
-        detailView.heroModifiers = [.fade, .translate(x: 0, y: 400)]
+        view.addSubview(stackView)
+        stackView.spacing = 0
+        stackView.addArrangedSubview(imageView)
+        stackView.addArrangedSubview(detailView)
+        guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
+        detailView.heroModifiers = [.fade, orientation.isPortrait ? .translate(x: 0, y: 400) : .translate(x: 400, y: 0)]
         detailView.backgroundColor = AppColors.descriptionBackground.color
         detailView.layer.cornerRadius = UIConstants.cornerRadius.rawValue
         detailView.viewModel = viewModel
@@ -117,18 +126,39 @@ class ImageDetailScreenView: UIViewController {
         updateUI()
         setupConstraints()
     }
+    
     private func setupConstraints() {
-        imageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.left.equalTo(self.view).offset(5)
-            make.right.equalTo(self.view).offset(-5)
-            make.height.equalTo(self.view.frame.width)
+        guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
+        if orientation == .portrait {
+            stackView.axis = .vertical
+            stackView.snp.makeConstraints { make in
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+                make.left.right.equalTo(self.view).inset(5)
+                make.bottom.equalTo(self.view)
+            }
+            
+        } else {
+            stackView.axis = .horizontal
+            stackView.snp.makeConstraints { make in
+                make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+                make.left.right.equalTo(view.safeAreaLayoutGuide).inset(5)
+                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            }
         }
-        detailView.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom)
-            make.left.equalTo(view).offset(5)
-            make.right.equalTo(view).offset(-5)
-            make.bottom.equalTo(self.view)
+    }
+    private func updateConstraints() {
+        guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
+        stackView.axis = orientation.isLandscape ? .horizontal : .vertical
+        stackView.snp.remakeConstraints { make in
+            if orientation.isLandscape {
+                make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+                make.left.right.equalTo(view.safeAreaLayoutGuide).inset(5)
+                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            } else {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+                make.left.right.equalTo(self.view).inset(5)
+                make.bottom.equalTo(self.view)
+            }
         }
     }
 }

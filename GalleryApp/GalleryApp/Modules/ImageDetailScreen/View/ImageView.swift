@@ -8,7 +8,6 @@ final class ImageView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(photoImageView)
-        layout()
     }
     
     required init?(coder: NSCoder) {
@@ -23,9 +22,23 @@ final class ImageView: UIView {
         photoImageView.layer.cornerRadius = UIConstants.cornerRadius.rawValue
     }
     
-    private func layout() {
-        photoImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+    override func updateConstraints() {
+        super.updateConstraints()
+        guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
+        if orientation.isLandscape {
+            photoImageView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+                make.width.equalToSuperview { view in
+                    view.snp.height
+                }
+            }
+        } else {
+            photoImageView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+                make.height.equalToSuperview { view in
+                    view.snp.width
+                }
+            }
         }
     }
 }
