@@ -46,7 +46,13 @@ final class ImageGalleryScreenView: UIViewController {
     private func observe() {
         viewModel?.$photos
             .filter { !$0.isEmpty }
-            .receive(on: DispatchQueue.global())
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.reloadSnapshot()
+            }.store(in: &cancellable)
+        viewModel?.$favouriteDict
+            .filter { !$0.isEmpty }
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.reloadSnapshot()
             }.store(in: &cancellable)
@@ -64,7 +70,6 @@ final class ImageGalleryScreenView: UIViewController {
             if photoView.numberOfItems(inSection: 0) < viewModel?.photos.count ?? 0 {
                 self.reloadSnapshot()
             }
-            print("Here")
             photoView.scrollToItem(at: IndexPath(row: id, section: 0),
                                    at: [.centeredVertically, .centeredHorizontally],
                                    animated: true)
@@ -78,15 +83,12 @@ final class ImageGalleryScreenView: UIViewController {
               let databasePhotos = viewModel?.databasePhotos,
               let empty = viewModel?.databasePhotos.isEmpty else { return }
         snapshot.appendItems(isFavourite ? databasePhotos : photos, toSection: .main)
-        dataSource.apply(snapshot, animatingDifferences: true)
-        DispatchQueue.main.async {
+            self.dataSource.apply(snapshot, animatingDifferences: true)
             if self.isFavourite && (empty) {
                 self.isEmptyLabel.isHidden = false
             } else {
                 self.isEmptyLabel.isHidden = true
             }
-        }
-        
     }
     
     private func configUI() {
@@ -117,7 +119,9 @@ extension ImageGalleryScreenView: UICollectionViewDelegate, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         viewModel?.pushDetails(id: indexPath.row, isFavorite: isFavourite)
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
         let width = (orientation?.isPortrait ?? false) ? (view.frame.width/3)-5 : (view.frame.width/6)
         return CGSize(width: width, height: width)
@@ -138,11 +142,6 @@ extension ImageGalleryScreenView {
         layout.minimumLineSpacing = 3
         layout.scrollDirection = .vertical
         return layout
-    }
-    
-    private func updateCollectionViewLayout() {
-        print("Creating layout")
-        photoView.collectionViewLayout = createLayout()
     }
     
     private func configureCollectionViewLayout() {
@@ -227,9 +226,10 @@ extension ImageGalleryScreenView {
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: PhotoCell.identifier,
                     for: indexPath) as? PhotoCell
+                let isFav = self.viewModel?.favouriteDict[item.id]
                 cell?.configure(index: item.id,
                                 item: item,
-                                isFav: item.likedByUser ?? false,
+                                isFav: isFav ?? false,
                                 isFavouriteTab: self.isFavourite)
                 return cell
             }
@@ -248,7 +248,7 @@ extension ImageGalleryScreenView {
         if indexPath.item == (viewModel?.photos.count ?? 0) - 1 {
             isPaginating = true
             viewModel?.page += 1
-            viewModel?.getData()
+            viewModel?.getDataFromApi()
         }
     }
     

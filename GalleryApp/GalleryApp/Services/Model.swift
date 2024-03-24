@@ -2,7 +2,7 @@ import Foundation
 
 struct PhotoArray: Decodable {
     let uuid = UUID()
-    var likedByUser: Bool?
+    var needUpdate: Bool?
     let id: String
     let width: Int
     let height: Int
@@ -16,7 +16,7 @@ extension PhotoArray: Hashable {
         hasher.combine(uuid)
     }
     static func == (lhs: PhotoArray, rhs: PhotoArray) -> Bool {
-        return lhs.uuid == rhs.uuid && lhs.likedByUser == rhs.likedByUser
+        return lhs.uuid == rhs.uuid && lhs.needUpdate == rhs.needUpdate
     }
 }
 

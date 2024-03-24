@@ -2,8 +2,8 @@ import UIKit
 import Hero
 protocol CoordinatorProtocol {
     func start()
-    func pushDetailsView(id: Int, photos: [PhotoArray], page: Int)
-    func backToMainView(id: Int, photos: [PhotoArray]?, page: Int)
+    func pushDetailsView(id: Int, photos: [PhotoArray], page: Int, favouriteDict: [String: Bool], isFav: Bool)
+    func backToMainView(id: Int, photos: [PhotoArray]?, page: Int, favouriteDict: [String: Bool])
 }
 final class Coordinator: CoordinatorProtocol {
 
@@ -19,19 +19,21 @@ final class Coordinator: CoordinatorProtocol {
         navigationController.pushViewController(imageGalleryVC, animated: true)
     }
 
-    func pushDetailsView(id: Int, photos: [PhotoArray], page: Int) {
+    func pushDetailsView(id: Int, photos: [PhotoArray], page: Int, favouriteDict: [String: Bool], isFav: Bool) {
         let detailsVC = ImageDetailScreenView()
         let viewModel = ImageDetailsScreenViewModel()
         viewModel.coordinator = self
         viewModel.id = id
         viewModel.photos = photos
         viewModel.page = page
+        viewModel.favouriteDict = favouriteDict
+        viewModel.isFavourite = isFav
         detailsVC.viewModel = viewModel
         navigationController.isHeroEnabled = true
         navigationController.heroNavigationAnimationType = .fade
         navigationController.pushViewController(detailsVC, animated: true)
     }
-    func backToMainView(id: Int, photos: [PhotoArray]?, page: Int) {
+    func backToMainView(id: Int, photos: [PhotoArray]?, page: Int, favouriteDict: [String: Bool]) {
         guard let imageGalleryVC = navigationController.viewControllers.first as? ImageGalleryScreenView else { return }
         let viewModel = imageGalleryVC.viewModel
         viewModel?.coordinator = self
@@ -39,6 +41,7 @@ final class Coordinator: CoordinatorProtocol {
         if let photos = photos {
             viewModel?.photos = photos
         }
+        viewModel?.favouriteDict = favouriteDict
         viewModel?.page = page
         imageGalleryVC.viewModel = viewModel
         navigationController.popToViewController(imageGalleryVC, animated: true)

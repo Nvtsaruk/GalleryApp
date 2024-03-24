@@ -13,7 +13,7 @@ final class DatabaseService {
         var dbPhotos = DatabasePhotos()
         let modelToDatabase = ModelToDatabase(photos: photos)
         dbPhotos = modelToDatabase.modelToDatabase()
-        dbPhotos.likedByUser = true
+        dbPhotos.needUpdate = true
         dbPhotos.localUrlRegular = imageUrlRegular
         try? realm?.write {
             realm?.add(dbPhotos)

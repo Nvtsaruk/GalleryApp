@@ -3,3 +3,4 @@ enum NetworkConstants {
     static let token = "B_8irYfHoAoq6EvqrmbQdXo3U1tYXFcaQmMGkyqpJkI"
     static let perPage = 30
 }
+

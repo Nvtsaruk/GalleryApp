@@ -52,7 +52,7 @@ class ImageDetailScreenView: UIViewController {
                     updateUI()
                 } else {
                     guard let isFavourite = viewModel?.isFavourite else { return }
-                    if !isFavourite {
+                    if isFavourite {
                         viewModel?.id = 0
                         updateUI()
                         
@@ -94,11 +94,12 @@ class ImageDetailScreenView: UIViewController {
             let description = self.viewModel?.photos[self.viewModel?.id ?? 0].description
             guard let width = self.viewModel?.photos[self.viewModel?.id ?? 0].width,
                   let height = self.viewModel?.photos[self.viewModel?.id ?? 0].height else { return }
+            let isFav = self.viewModel?.favouriteDict[self.viewModel?.photos[self.viewModel?.id ?? 0].id ?? ""]
             self.detailView.configure(descLabelText: description ?? "No description",
                                       width: width,
                                       height: height,
                                       user: self.viewModel?.photos[self.viewModel?.id ?? 0].user.username ?? "No name",
-                                      isFav: (self.viewModel?.photos[self.viewModel?.id ?? 0].likedByUser ?? false))
+                                      isFav: (isFav ?? false))
         }, completion: nil)
     }
     

@@ -5,9 +5,10 @@ final class ImageDetailsScreenViewModel {
     var coordinator: CoordinatorProtocol?
     let apiService = ApiService()
     @Published var photos: [PhotoArray] = []
+    var favouriteDict: [String: Bool] = [:]
     private var cancellable: Set<AnyCancellable> = []
     var id = 0
-    var isFavourite = false
+    var isFavourite = false 
     var page = 1
     func getData() {
         apiService.getPhotos(page: page)
@@ -18,15 +19,17 @@ final class ImageDetailsScreenViewModel {
             }.store(in: &cancellable)
     }
     func toggleFavourites(regularImage: Data?) {
-        if photos[id].likedByUser ?? false {
+        if favouriteDict[photos[id].id] ?? false {
             DatabaseService.shared.deleteFromDatabase(id: photos[id].id)
             LocalStorageService.shared.removeImage(forKey: photos[id].id)
-            photos[id].likedByUser?.toggle()
+            favouriteDict.removeValue(forKey: photos[id].id)
+            photos[id].needUpdate = false
         } else {
             guard let regularImage = regularImage else { return }
             saveToLocalStorage(image: regularImage)
             DatabaseService.shared.addToDatabase(photos: photos[id], imageUrlRegular: photos[id].id)
-            photos[id].likedByUser = true
+            photos[id].needUpdate = true
+            favouriteDict[photos[id].id] = true
         }
     }
     
@@ -35,7 +38,10 @@ final class ImageDetailsScreenViewModel {
     }
 
     func backToMainView() {
-        coordinator?.backToMainView(id: id, photos: isFavourite ? photos : nil, page: page)
+        coordinator?.backToMainView(id: id,
+                                    photos: isFavourite ? nil : photos,
+                                    page: page,
+                                    favouriteDict: favouriteDict)
     }
 
 }

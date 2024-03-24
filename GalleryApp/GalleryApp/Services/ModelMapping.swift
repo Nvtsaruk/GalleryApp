@@ -25,7 +25,7 @@ final class DatabaseToModel {
               let dbUrls = dbPhotos.urls else { return nil }
         let user = UserModel(username: dbUser.username)
         let urls = UrlsModel(regular: dbUrls.regular, small: dbUrls.small)
-        let photoModel = PhotoArray(likedByUser: dbPhotos.likedByUser,
+        let photoModel = PhotoArray(needUpdate: dbPhotos.needUpdate,
                                     id: dbPhotos.id,
                                     width: dbPhotos.width,
                                     height: dbPhotos.height,

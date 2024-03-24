@@ -3,7 +3,7 @@ import RealmSwift
 
 final class DatabasePhotos: Object {
     @Persisted(primaryKey: true) var uuid: UUID
-    @Persisted var likedByUser: Bool
+    @Persisted var needUpdate: Bool
     @Persisted var id: String
     @Persisted var width: Int
     @Persisted var height: Int

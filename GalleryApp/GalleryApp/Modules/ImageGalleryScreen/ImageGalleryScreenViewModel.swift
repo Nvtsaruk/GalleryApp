@@ -6,12 +6,9 @@ final class ImageGalleryScreenViewModel {
     let apiService = ApiService()
     private var cancellable: Set<AnyCancellable> = []
     @Published var photos: [PhotoArray] = []
-    @Published var databasePhotos: [PhotoArray] = [] 
-    @Published var id = 0 {
-        didSet {
-            print(id)
-        }
-    }
+    @Published var databasePhotos: [PhotoArray] = []
+    @Published var favouriteDict: [String: Bool] = [:]
+    @Published var id = 0
     var page = 1
     
     func getData() {
@@ -19,7 +16,7 @@ final class ImageGalleryScreenViewModel {
         getDataFromDatabase()
     }
     
-    private func getDataFromApi() {
+    func getDataFromApi() {
         apiService.getPhotos(page: page)
             .receive(on: DispatchQueue.main)
             .sink { error in
@@ -29,7 +26,7 @@ final class ImageGalleryScreenViewModel {
             }.store(in: &cancellable)
     }
     
-    private func getDataFromDatabase() {
+    func getDataFromDatabase() {
         DatabaseService.shared.getAllPhotos()
         DatabaseService.shared.$photos
             .receive(on: DispatchQueue.main)
@@ -43,24 +40,22 @@ final class ImageGalleryScreenViewModel {
     }
 
     private func addFavs() {
-        photos.indices.forEach {
-            photos[$0].likedByUser = nil
+//        favouriteDict = databasePhotos.reduce(into: [String: Bool]()) {
+////            $0[$1.id] = $1.likedByUser
+//            $0[$1.id] = true
+//        }
+        var tempDict: [String: Bool] = [:]
+        databasePhotos.forEach{ item in
+            tempDict[item.id] = true
         }
-        databasePhotos.forEach { item in
-            guard let index = (getArrayIndex(item: item)) else { return }
-            photos[index].likedByUser = item.likedByUser
-        }
-    }
-    
-    private func getArrayIndex(item: PhotoArray) -> Int? {
-        return photos.firstIndex(where: {$0.id == item.id})
+        favouriteDict = tempDict
     }
     
     func pushDetails(id: Int, isFavorite: Bool) {
         if !isFavorite {
-            coordinator?.pushDetailsView(id: id, photos: photos, page: page)
+            coordinator?.pushDetailsView(id: id, photos: photos, page: page, favouriteDict: favouriteDict, isFav: isFavorite)
         } else {
-            coordinator?.pushDetailsView(id: id, photos: databasePhotos, page: page)
+            coordinator?.pushDetailsView(id: id, photos: databasePhotos, page: page, favouriteDict: favouriteDict, isFav: isFavorite)
         }
     }
 }
