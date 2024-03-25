@@ -3,8 +3,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-    <img src="Images/logo.jpg" alt="Logo" width="80" height="80">
-  <h3 align="center">Music app README</h3>
+    <img src="Images/AppLogo.jpg" alt="Logo" width="80" height="80">
+  <h3 align="center">Gallery App README</h3>
 
 </div>
 
@@ -27,9 +27,9 @@
 
 ## About The Project
 
-| Main Screen | User profile | User details | Playlist details |
+| Main Screen | Main Screen Landscape | User details | Playlist details |
 | --- | --- | --- | --- |
-| <img src="Images/MainScreen.png" alt="Main screen"> | <img src="Images/UserProfile.png" alt="User profile"> | <img src="Images/UserDetails.png" alt="User details"> | <img src="Images/PlaylistDetails.png" alt="Playlist details"> |
+| <img src="Images/MainScreenPortrait.png" alt="Main screen"> | <img src="Images/MainScreenLandscape.png" alt="Main Screen Landscape"> | <img src="Images/UserDetails.png" alt="User details"> | <img src="Images/PlaylistDetails.png" alt="Playlist details"> |
 | Artist details | Album details | Search page | Search categories |
 | <img src="Images/ArtistDetails.png" alt="Artist details"> | <img src="Images/AlbumDetails.png" alt="Album details"> | <img src="Images/SearchPage.png" alt="Search page"> | <img src="Images/SearchCategories.png" alt="Search categories"> |
 | My media | Compact player | Full player | Add\create playlist |
