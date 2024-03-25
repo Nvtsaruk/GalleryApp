@@ -10,6 +10,9 @@
 
 <!-- TABLE OF CONTENTS -->
 <details>
+    <div align = "center">
+<a href="https://www.youtube.com/shorts/-sUoameFA_s">Youtube preview</a>
+        </div>
   <summary>Table of Contents</summary>
   <ol>
     <li>
