@@ -1,9 +1,12 @@
 import UIKit
 
 final class PhotoCell: UICollectionViewCell {
+    
     static let identifier = "PhotoCell"
+    
     private let photoImageView = UIImageView()
     private let favIcon = UIImageView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configUI()
@@ -24,6 +27,7 @@ final class PhotoCell: UICollectionViewCell {
         photoImageView.heroID = index
         favIcon.isHidden = !isFav
     }
+    
     private func configUI() {
         addSubview(photoImageView)
         addSubview(favIcon)

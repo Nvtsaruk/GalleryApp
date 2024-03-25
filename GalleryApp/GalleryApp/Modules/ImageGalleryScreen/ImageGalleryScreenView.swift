@@ -28,6 +28,7 @@ final class ImageGalleryScreenView: UIViewController {
         viewModel?.getData()
         observe()
     }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         photoView.collectionViewLayout.invalidateLayout()
@@ -115,6 +116,8 @@ final class ImageGalleryScreenView: UIViewController {
     }
 }
 
+// MARK: - Setup CollectionView
+
 extension ImageGalleryScreenView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         viewModel?.pushDetails(id: indexPath.row, isFavorite: isFavourite)
@@ -128,9 +131,8 @@ extension ImageGalleryScreenView: UICollectionViewDelegate, UICollectionViewDele
         }
 }
 
-// MARK: - Setup CollectionView
-
 extension ImageGalleryScreenView {
+    
     enum Section: Int, CaseIterable {
         case main
     }
@@ -145,7 +147,6 @@ extension ImageGalleryScreenView {
     }
     
     private func configureCollectionViewLayout() {
-        
         photoView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         photoView.delegate = self
         photoView.register(
@@ -155,7 +156,6 @@ extension ImageGalleryScreenView {
             FooterView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
             withReuseIdentifier: FooterView.identifier)
-        
         photoView.backgroundColor = .clear
     }
     
@@ -163,7 +163,7 @@ extension ImageGalleryScreenView {
         guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
         if orientation.isPortrait {
             photoView.snp.remakeConstraints { make in
-                make.left.right.bottom.equalTo(self.view)
+                make.left.right.bottom.equalTo(view)
                 make.top.equalTo(stackView.snp.bottom).offset(5)
             }
             stackView.snp.remakeConstraints { make in
@@ -175,8 +175,8 @@ extension ImageGalleryScreenView {
             }
         } else {
             photoView.snp.remakeConstraints { make in
-                make.left.right.equalTo(self.view.safeAreaLayoutGuide)
-                make.bottom.equalTo(self.view)
+                make.left.right.equalTo(view.safeAreaLayoutGuide)
+                make.bottom.equalTo(view)
                 make.top.equalTo(stackView.snp.bottom).offset(5)
             }
             stackView.snp.remakeConstraints { make in
@@ -192,20 +192,20 @@ extension ImageGalleryScreenView {
         guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
         if orientation.isPortrait {
             photoView.snp.makeConstraints { make in
-                make.left.right.bottom.equalTo(self.view)
+                make.left.right.bottom.equalTo(view)
                 make.top.equalTo(stackView.snp.bottom).offset(5)
             }
             stackView.snp.makeConstraints { make in
-                make.top.equalTo(self.view.safeAreaLayoutGuide)
-                make.left.equalTo(self.view).inset(5)
+                make.top.equalTo(view.safeAreaLayoutGuide)
+                make.left.equalTo(view).inset(5)
             }
             isEmptyLabel.snp.makeConstraints { make in
-                make.center.equalTo(self.view.center)
+                make.center.equalTo(view.center)
             }
         } else {
             photoView.snp.makeConstraints { make in
-                make.left.right.equalTo(self.view.safeAreaLayoutGuide)
-                make.bottom.equalTo(self.view)
+                make.left.right.equalTo(view.safeAreaLayoutGuide)
+                make.bottom.equalTo(view)
                 make.top.equalTo(stackView.snp.bottom).offset(5)
             }
             stackView.snp.makeConstraints { make in
@@ -251,5 +251,4 @@ extension ImageGalleryScreenView {
             viewModel?.getDataFromApi()
         }
     }
-    
 }

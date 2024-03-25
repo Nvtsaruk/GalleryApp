@@ -2,13 +2,17 @@ import Foundation
 import Combine
 
 final class ImageGalleryScreenViewModel {
+    
     var coordinator: CoordinatorProtocol?
     let apiService = ApiService()
+    
     private var cancellable: Set<AnyCancellable> = []
+    
     @Published var photos: [PhotoArray] = []
     @Published var databasePhotos: [PhotoArray] = []
     @Published var favouriteDict: [String: Bool] = [:]
     @Published var id = 0
+    
     var page = 1
     
     func getData() {
@@ -40,12 +44,8 @@ final class ImageGalleryScreenViewModel {
     }
 
     private func addFavs() {
-//        favouriteDict = databasePhotos.reduce(into: [String: Bool]()) {
-////            $0[$1.id] = $1.likedByUser
-//            $0[$1.id] = true
-//        }
         var tempDict: [String: Bool] = [:]
-        databasePhotos.forEach{ item in
+        databasePhotos.forEach { item in
             tempDict[item.id] = true
         }
         favouriteDict = tempDict
@@ -53,9 +53,17 @@ final class ImageGalleryScreenViewModel {
     
     func pushDetails(id: Int, isFavorite: Bool) {
         if !isFavorite {
-            coordinator?.pushDetailsView(id: id, photos: photos, page: page, favouriteDict: favouriteDict, isFav: isFavorite)
+            coordinator?.pushDetailsView(id: id,
+                                         photos: photos,
+                                         page: page,
+                                         favouriteDict: favouriteDict,
+                                         isFavScreen: isFavorite)
         } else {
-            coordinator?.pushDetailsView(id: id, photos: databasePhotos, page: page, favouriteDict: favouriteDict, isFav: isFavorite)
+            coordinator?.pushDetailsView(id: id,
+                                         photos: databasePhotos,
+                                         page: page,
+                                         favouriteDict: favouriteDict,
+                                         isFavScreen: isFavorite)
         }
     }
 }
