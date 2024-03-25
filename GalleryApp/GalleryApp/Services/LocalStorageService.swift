@@ -1,5 +1,7 @@
 import Foundation
+
 final class LocalStorageService {
+    
     static var shared = LocalStorageService()
     private init() {}
     

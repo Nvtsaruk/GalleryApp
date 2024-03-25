@@ -2,6 +2,7 @@ import RealmSwift
 import Combine
 
 final class DatabaseService {
+    
     static var shared = DatabaseService()
     private init() {}
     
@@ -40,6 +41,5 @@ final class DatabaseService {
             realm?.delete(dbPhotos)
             getAllPhotos()
         }
-        
     }
 }

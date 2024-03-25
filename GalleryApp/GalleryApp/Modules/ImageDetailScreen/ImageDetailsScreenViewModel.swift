@@ -2,14 +2,18 @@ import Foundation
 import Combine
 
 final class ImageDetailsScreenViewModel {
+    
     var coordinator: CoordinatorProtocol?
     let apiService = ApiService()
+    
     @Published var photos: [PhotoArray] = []
+    
     var favouriteDict: [String: Bool] = [:]
     private var cancellable: Set<AnyCancellable> = []
     var id = 0
     var isFavourite = false 
     var page = 1
+    
     func getData() {
         apiService.getPhotos(page: page)
             .sink { error in
@@ -18,6 +22,7 @@ final class ImageDetailsScreenViewModel {
                 self.photos.append(contentsOf: photos)
             }.store(in: &cancellable)
     }
+    
     func toggleFavourites(regularImage: Data?) {
         if favouriteDict[photos[id].id] ?? false {
             DatabaseService.shared.deleteFromDatabase(id: photos[id].id)
@@ -43,5 +48,4 @@ final class ImageDetailsScreenViewModel {
                                     page: page,
                                     favouriteDict: favouriteDict)
     }
-
 }

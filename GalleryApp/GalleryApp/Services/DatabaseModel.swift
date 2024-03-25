@@ -2,6 +2,7 @@ import Foundation
 import RealmSwift
 
 final class DatabasePhotos: Object {
+    
     @Persisted(primaryKey: true) var uuid: UUID
     @Persisted var needUpdate: Bool
     @Persisted var id: String
@@ -30,6 +31,7 @@ final class DatabasePhotos: Object {
 }
 
 final class DatabaseUser: Object {
+    
     @Persisted var username: String
     
     convenience init(_ model: UserModel) {
@@ -39,6 +41,7 @@ final class DatabaseUser: Object {
 }
 
 final class DatabaseUrls: Object {
+    
     @Persisted var regular: String
     @Persisted var small: String
     
