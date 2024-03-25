@@ -5,8 +5,8 @@ import SDWebImage
 final class DetailView: UIView {
     
     var isFavourite: Bool = false
-    let stackView = UIStackView()
     
+    let stackView = UIStackView()
     let descriptionTitle = UILabel()
     let descriptionLabel = UILabel()
     let sizeTitle = UILabel()

@@ -8,18 +8,23 @@ enum LabelType {
 }
 
 class ImageDetailScreenView: UIViewController {
+    
     var viewModel: ImageDetailsScreenViewModel?
     private var cancellable: Set<AnyCancellable> = []
-    lazy var imageView = ImageView()
-    lazy var detailView = DetailView()
+    
+    private let imageView = ImageView()
+    private let detailView = DetailView()
     private let stackView = UIStackView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupGestures()
         observe()
     }
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    
+    override func viewWillTransition(to size: CGSize,
+                                     with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         updateConstraints()
         imageView.updateConstraints()
@@ -27,10 +32,12 @@ class ImageDetailScreenView: UIViewController {
     }
     
     private func setupGestures() {
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
+        let swipeRight = UISwipeGestureRecognizer(target: self,
+                                                  action: #selector(respondToSwipeGesture))
         swipeRight.direction = .right
         self.view.addGestureRecognizer(swipeRight)
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
+        let swipeLeft = UISwipeGestureRecognizer(target: self,
+                                                 action: #selector(respondToSwipeGesture))
         swipeLeft.direction = .left
         self.view.addGestureRecognizer(swipeLeft)
     }
@@ -70,7 +77,7 @@ class ImageDetailScreenView: UIViewController {
     
     private func observe() {
         viewModel?.$photos
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.updateUI()
             }.store(in: &cancellable)
@@ -112,12 +119,17 @@ class ImageDetailScreenView: UIViewController {
                                                       style: UIBarButtonItem.Style.plain,
                                                       target: self,
                                                       action: #selector(backToMainView))
+        backToRootVCButton.tintColor = AppColors.activeButton.color
+        backToRootVCButton.image = UIImage(systemName: "chevron.left")
         self.navigationItem.setLeftBarButton(backToRootVCButton, animated: true)
+        
         view.backgroundColor = AppColors.background.color
+        
         view.addSubview(stackView)
         stackView.spacing = 0
         stackView.addArrangedSubview(imageView)
         stackView.addArrangedSubview(detailView)
+        
         guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
         detailView.heroModifiers = [.fade, orientation.isPortrait ? .translate(x: 0, y: 400) : .translate(x: 400, y: 0)]
         detailView.backgroundColor = AppColors.descriptionBackground.color
@@ -130,35 +142,35 @@ class ImageDetailScreenView: UIViewController {
     
     private func setupConstraints() {
         guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
-        if orientation == .portrait {
-            stackView.axis = .vertical
+        stackView.axis = orientation.isLandscape ? .horizontal : .vertical
+        if orientation.isPortrait {
             stackView.snp.makeConstraints { make in
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-                make.left.right.equalTo(self.view).inset(5)
-                make.bottom.equalTo(self.view)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(-40)
+                make.left.right.equalTo(view).inset(5)
+                make.bottom.equalTo(view)
             }
             
         } else {
-            stackView.axis = .horizontal
             stackView.snp.makeConstraints { make in
-                make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
                 make.left.right.equalTo(view.safeAreaLayoutGuide).inset(5)
-                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             }
         }
     }
+    
     private func updateConstraints() {
         guard let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation else { return }
         stackView.axis = orientation.isLandscape ? .horizontal : .vertical
         stackView.snp.remakeConstraints { make in
-            if orientation.isLandscape {
-                make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-                make.left.right.equalTo(view.safeAreaLayoutGuide).inset(5)
-                make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            if orientation.isPortrait {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(-40)
+                make.left.right.equalTo(view).inset(5)
+                make.bottom.equalTo(view)
             } else {
                 make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-                make.left.right.equalTo(self.view).inset(5)
-                make.bottom.equalTo(self.view)
+                make.left.right.equalTo(view.safeAreaLayoutGuide).inset(5)
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             }
         }
     }
