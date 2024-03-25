@@ -10,9 +10,7 @@
 
 <!-- TABLE OF CONTENTS -->
 <details>
-    <div align = "center">
-<a href="https://www.youtube.com/shorts/-sUoameFA_s">Youtube preview</a>
-        </div>
+    
   <summary>Table of Contents</summary>
   <ol>
     <li>
@@ -29,10 +27,13 @@
 </details>
 
 ## About The Project
+<div align = "center">
+<a href="https://www.youtube.com/shorts/-sUoameFA_s" target="_blank">Youtube preview</a>
+        </div>
 
-| Main Screen | Main Screen Landscape | User details | Playlist details |
+| Main Screen | Main Screen Landscape | Favourites Screen | Details Screen |
 | --- | --- | --- | --- |
-| <img src="Images/MainScreenPortrait.png" alt="Main screen"> | <img src="Images/MainScreenLandscape.png" alt="Main Screen Landscape"> | <img src="Images/UserDetails.png" alt="User details"> | <img src="Images/PlaylistDetails.png" alt="Playlist details"> |
+| <img src="Images/MainScreenPortrait.png" alt="Main screen"> | <img src="Images/MainScreenLandscape.png" alt="Main Screen Landscape"> | <img src="Images/FavouritesScreen.png" alt="Favourites Screen"> | <img src="Images/DetailsScreen.png" alt="Details Screen"> |
 | Artist details | Album details | Search page | Search categories |
 | <img src="Images/ArtistDetails.png" alt="Artist details"> | <img src="Images/AlbumDetails.png" alt="Album details"> | <img src="Images/SearchPage.png" alt="Search page"> | <img src="Images/SearchCategories.png" alt="Search categories"> |
 | My media | Compact player | Full player | Add\create playlist |
